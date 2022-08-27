@@ -119,7 +119,7 @@ const disableProduct = async (req, res, next) => {
         ],
         include: {
           model: Categorie,
-          attributes: ["name", "id"],
+          attributes: ["category", "id"],
         },
       });
   

@@ -16,7 +16,7 @@ module.exports = (sequelize) => {
           notNull: { msg: "The category id field cannot be null " },
         },
       },
-      name: {
+      category: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
