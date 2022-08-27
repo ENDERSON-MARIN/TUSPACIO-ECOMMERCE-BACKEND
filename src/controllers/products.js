@@ -1,36 +1,54 @@
 const { Product, Categorie } = require("../db");
 const axios = require("axios")
-const { URL_PRODUCTS } = require("./globalConst")
+const { URL_API } = require("./globalConst")
+
 
 /* GET ALL PRODUCTS FROM DB */
 const getAllProducts = async (req, res, next) => {
   try {
-    const api = await axios(URL_PRODUCTS )    
+    const api = await axios(URL_INVENTARIO)
+
     const e = api.data;
-    let allProducts = e.map(e => {
-        return {
-          id: e.id,
-          name: e.name,
-          features: e.description,
-          price: e.price,
-          price_sign: e.price_sign,                      // Esto es para agregar el simbolo de dolar, a menos que manejemos un campo mas en la db para indicar la moneda
-          image: e.image_link,
-          // status,                                    //! descomentar cuando se traiga desde la db
-          // stock,                                     //! descomentar cuando se traiga desde la db
-          category: e.category,
-          // category_id,                                    //!  revisar como es la llamada de la categoria cuando se traiga desde la db
-          product_colors: e.product_colors.map(color=>({        //  Esto nos trae los tipos de colores que tiene el producto
-            hex_value: color.hex_value,
-            colour_name: color.colour_name
-          })),
-        }
-    })   
-    res.send(allProducts)
-    
-    
-  } catch (error) {
-    next(error);
-  }
+    //let allProducts = e.map(e => {
+
+      //e.brand
+      // return {
+      // async function newProduct(){  
+      //   return (
+      //   Product.create({
+      //   brand: e.brand,
+      //   name: e.name,
+      //   description: e.description,
+      //   price: e.price,
+      //   currency: e.currency,
+      //   image: e.image_link,
+      //   rating: e.rating,
+      //   category: e.category,
+      //   product_type: e.product_type,
+      //   product_colors: e.product_colors.map(e => (
+      //     e.hex_value
+      //   )),
+      //   product_colors_name: e.product_colors.map(e => (
+      //     e.colour_name
+      //   )),
+      //   tag_list: e.tag_list.map(e => e)
+      // }))
+
+      // let categoryId = await Categorie.findAll({
+      //   where: {
+      //     name: e.category
+      //   }
+      // })
+      
+      // newProduct.addCategorie(categoryId)
+      // } 
+    // }
+    })
+
+    //res.send(categoryId)
+//   } catch (error) {
+//     next(error);
+//   }
 };
 
 /* CREATE NEW PRODUCT IN THE DATABASE */
@@ -97,36 +115,31 @@ const updateProduct = async (req, res, next) => {
 const disableProduct = async (req, res, next) => {
   try {
     const { id } = req.params;
-      await Product.update(
-        { status: false },
-        {
-          where: {
-            id: id,
-          },
-        }
-      );
-  
-      const disabledProduct = await Product.findByPk(id, {
-        attributes: [
-          "id",
-          "name",
-          "features",
-          "price",
-          "image",
-          "status",
-          "stock",
-          "category_id",
-        ],
-        include: {
-          model: Categorie,
-          attributes: ["category", "id"],
         },
-      });
-  
-      res.status(200).json({
-        ok: true,
-        disabledProduct,
-      });
+      }
+    );
+
+    const disabledProduct = await Product.findByPk(id, {
+      attributes: [
+        "id",
+        "name",
+        "features",
+        "price",
+        "image",
+        "status",
+        "stock",
+        "category_id",
+      ],
+      include: {
+        model: Categorie,
+        attributes: ["name", "id"],
+      },
+    });
+
+    res.status(200).json({
+      ok: true,
+      disabledProduct,
+    });
 
   } catch (error) {
     next(error);
