@@ -1,11 +1,43 @@
-const { Categorie } = require("../db");
+const { Categorie, Product } = require("../db");
 
 /* GET ALL CATEGORIES FROM DB */
 const getAllCategories = async (req, res, next) => {
   try {
-    const AllCategories = await Categorie?.findAll();
+    const { name } = req.query;
 
-    res.status(200).send(AllCategories);
+    const allCategories = await Categorie?.findAll({
+      attributes: ["id", "name"],
+      include: {
+        model: Product,
+        /* PARA TRAER PRODUCTOS ACTIVOS POR CATEGORIAS */
+        // where: {
+        //   status: true,
+        // },
+      },
+    });
+
+    if (name) {
+      const categoriesFilters = allCategories.filter((c) =>
+        c.name.toLowerCase().includes(name.toLowerCase())
+      );
+      console.log(categoriesFilters);
+
+      if (categoriesFilters.length) {
+        return res.status(200).json({
+          ok: true,
+          categoriesFilters,
+        });
+      } else {
+        return res.status(404).json({
+          ok: false,
+          msg: "Category not Found!",
+        });
+      }
+    }
+    res.status(200).json({
+      ok: true,
+      allCategories,
+    });
   } catch (error) {
     next(error);
   }
@@ -13,19 +45,36 @@ const getAllCategories = async (req, res, next) => {
 
 /* CREATE NEW CATEGORY IN THE DATABASE */
 const createCategory = async (req, res, next) => {
+  const { name } = req.body;
+
   try {
-    const { name } = req.body;
-    /* CREATE NEW CATEGORY */
-    const newCategory = await Categorie.create({
-      name,
+    const query = name.toLowerCase();
+    const categoryModel = await Categorie.findOne({
+      where: {
+        name: query,
+      },
     });
 
-    res.status(200).json({
-      succMsg: "Category Created Successfully!",
-      newCategory,
+    if (categoryModel) {
+      return res.status(400).json({
+        ok: false,
+        msg: `The category ${query} already exists!`,
+      });
+    }
+
+    const newCategory = await Categorie.create({ name: query });
+
+    res.json({
+      ok: true,
+      id: newCategory.id,
+      name: newCategory.name,
     });
   } catch (error) {
-    next(error);
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      msg: "Notify administrator!",
+    });
   }
 };
 
@@ -77,5 +126,5 @@ module.exports = {
   getAllCategories,
   createCategory,
   updateCategory,
-  deleteCategory
+  deleteCategory,
 };

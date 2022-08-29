@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize");
-const { Categorie } = require('./Categorie')
+const { Categorie } = require("./Categorie");
 // Exportamos una funcion que define el modelo
 // Luego le injectamos la conexion a sequelize.
 
@@ -13,7 +13,6 @@ module.exports = (sequelize) => {
         primaryKey: true,
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,
-
       },
 
       name: {
@@ -67,7 +66,13 @@ module.exports = (sequelize) => {
           isUrl: true,
         },
       },
-      
+
+      status: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
+
       rating: {
         type: DataTypes.INTEGER,
         allowNull: true,
@@ -77,7 +82,7 @@ module.exports = (sequelize) => {
           min: 0,
         },
       },
-      //! ******************HACER QUE EL CATEGORY SE GUARDE EN LA TABLA RELACIONAL
+
       category_id: {
         type: DataTypes.UUID,
         allowNull: false,
