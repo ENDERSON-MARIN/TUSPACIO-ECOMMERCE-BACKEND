@@ -49,6 +49,7 @@ const createUser = async (req, res, next) => {
         ]
       }
     })
+    
     // SI EL USUARIO NO EXISTE LO CREA EN LA DB
     if (user.length === 0) {
       user = await User.create({
