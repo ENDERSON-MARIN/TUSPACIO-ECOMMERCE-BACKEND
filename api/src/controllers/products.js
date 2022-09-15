@@ -1,7 +1,8 @@
 const { Product, Categorie } = require("../db");
 const axios = require("axios");
 const { URL_API } = require("./globalConst");
-const { uploadCategoryDb } = require("../controllers/uploadCategoryDb")
+// const { uploadCategoryDb } = require("../controllers/uploadCategoryDb")
+const { QueryTypes } = require('sequelize');
 
 /* GET ALL PRODUCTS FROM DB */
 const getAllProducts = async (req, res, next) => {
@@ -196,11 +197,20 @@ const getDashboard = async (req, res) => {
   }
 }
 
-
-
-
+const getProductType = async (req, res) => {
+  try {
+    const results = await Product.sequelize.query(
+      "select  DISTINCT product_type from products", {
+      type: QueryTypes.SELECT}
+    )
+    res.send(results);
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 module.exports = {
+  getProductType,
   getAllProducts,
   createProduct,
   updateProduct,
