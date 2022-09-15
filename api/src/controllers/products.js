@@ -1,7 +1,8 @@
 const { Product, Categorie } = require("../db");
 const axios = require("axios");
 const { URL_API } = require("./globalConst");
-const { uploadCategoryDb } = require("../controllers/uploadCategoryDb")
+// const { uploadCategoryDb } = require("../controllers/uploadCategoryDb")
+const { QueryTypes } = require('sequelize');
 
 /* GET ALL PRODUCTS FROM DB */
 const getAllProducts = async (req, res, next) => {
@@ -21,30 +22,6 @@ const getAllProducts = async (req, res, next) => {
 
 /* CREATE NEW PRODUCT IN THE DATABASE */
 const createProduct = async (req, res, next) => {
-  // const api = await axios(URL_API)
-  // const resApi = api.data
-  // const result = resApi.map(e=> ({
-  //   name: e.name,
-  //   brand: e.brand,
-  //   price: e.price,
-  //   price_sign: e.price_sign,
-  //   currency: e.currency,
-  //   image_link: e.image_link,
-  //   description: e.description,
-  //   rating: e.rating,
-  //   product_type: e.product_type,
-  //   stock:50,
-  //   tag_list: e.tag_list,
-  //   product_colors: e.product_colors,
-  //   categories: e.category,
-  // }))
-
-  // const carga = Product.bulkCreate(result, {
-  //   include: Categorie,
-  // }).then(result=>{
-  //   console.log(result)
-  //   res.send(result)
-  // })
   try {
     /* ME TRAIGO TODOS LOS VALORES DEL CUERPO DE LA PETICION */
     const {
@@ -204,11 +181,20 @@ const getDashboard = async (req, res) => {
   }
 }
 
-
-
-
+const getProductType = async (req, res) => {
+  try {
+    const results = await Product.sequelize.query(
+      "select  DISTINCT product_type from products", {
+      type: QueryTypes.SELECT}
+    )
+    res.send(results);
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 module.exports = {
+  getProductType,
   getAllProducts,
   createProduct,
   updateProduct,
