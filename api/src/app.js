@@ -24,7 +24,14 @@ const server = express();
 
 server.name = 'API';
 
-server.use(cors());
+const whiteList = [
+  'http://localhost:3000', 
+  'http://localhost:3001', 
+  'https://tuspacio.herokuapp.com',
+  'https://tuspacio.vercel.app'
+]
+
+server.use(cors({ origin: whiteList }));
 server.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 server.use(bodyParser.json({ limit: '50mb' }));
 server.use(cookieParser());
