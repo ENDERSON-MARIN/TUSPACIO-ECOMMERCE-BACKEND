@@ -1,7 +1,7 @@
 const { updateOrder } = require('./orders');
 //Checkout
 const stripe = require('stripe')("sk_test_51Les4YKH7XmQskrVxo1Th9dZWzcjEynmqRUGSXByXhtBh7JbT3Zhvg4JATIIJAKP0XxhPkT1dLO9UdHDhoEiQKm100gdCLwxqr")
-const CLIENT = 'https://tuspacio.vercel.app/' || 'http://localhost:3000';
+const CLIENT = 'https://tuspacio.vercel.app' || 'http://localhost:3000';
 
 const Checkout = async (req, res) => {
   const { id, cartProducts} = req.body;
