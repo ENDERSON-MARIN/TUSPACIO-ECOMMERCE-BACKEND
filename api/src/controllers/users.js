@@ -4,6 +4,7 @@ const { User, Rol, Product } = require("../db");
 const axios = require("axios");
 const { URL_API } = require("./globalConst");
 const { Op } = require("sequelize")
+
 /* GET ALL USERS FROM DB */
 
 const getAllUsers = async (req, res) => {
@@ -14,6 +15,18 @@ const getAllUsers = async (req, res) => {
     console.log(error);
   }
 };
+
+/* GET ONE USER FROM DB */
+const getOneUsers = async (req, res) => {
+  try {
+    const dbUserInfo = await User.findOne({
+    where: { id: req.params.id
+    }})
+    res.send(dbUserInfo)
+  } catch (error) {
+    res.send({message: error.message})
+  }
+}
 
 /* CREATE NEW USER IN THE DATABASE */
 const createUser = async (req, res, next) => {
@@ -161,6 +174,7 @@ const getAllFavorites = async (req, res) => {
 
 module.exports = {
     getAllUsers,
+    getOneUsers,
     createUser,
     updateUser,
     deleteUser,
