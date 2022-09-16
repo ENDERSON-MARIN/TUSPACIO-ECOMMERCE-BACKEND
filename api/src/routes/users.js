@@ -32,6 +32,7 @@ const bodySchema = Joi.object({
 
 const {
   getAllUsers,
+  getOneUsers,
   createUser,
   updateUser,
   deleteUser,
@@ -44,13 +45,16 @@ const router = Router();
 
 /* SE ARMAN LAS RUTAS PASANDO LAS VALIDACIONES COMO MIDDLEWARES */
 
-/* GET ALL PRODUCTS FRONT THE DATABASE */
+/* GET ALL USERS FRONT THE DATABASE */
 router.get("/", getAllUsers);
 
-/* CREATE NEW PRODUCT IN THE DATABASE */
+/* GET ONE USER FRONT THE DATABASE */
+router.get("/:id", getOneUsers);
+
+/* CREATE NEW USER IN THE DATABASE */
 router.post("/", createUser);
 
-/* UPDATE PRODUCT IN THE DATABASE */
+/* UPDATE USERS IN THE DATABASE */
 router.put(
   "/:id",
   validator.params(paramsSchema),
@@ -58,7 +62,7 @@ router.put(
   updateUser
 );
 
-/* INSERT A FAVORITE PRODUCT OF A USER */
+/* INSERT A FAVORITE USER OF A USER */
 router.put(
   "/addFavorite/:idUser/:idProduct",
   validator.params(paramsSchema),
@@ -80,7 +84,7 @@ router.delete("/deleteFavorite/:idUser/:idProduct",
 
 
 
-/* DELETE PRODUCT IN THE DATABASE */
+/* DELETE USER IN THE DATABASE */
 router.delete("/:id", deleteUser);
 
 module.exports = router;
