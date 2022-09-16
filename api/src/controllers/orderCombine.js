@@ -77,20 +77,20 @@ const orderCombine = async (req, res, next) => {
     const { alpha , category, price, brand, rating } = req.query; 
     let result = await getAllProducts()
     try {
- 
-        if(category) result = await Product.findAll({
-            include: {
-                model: Categorie,
-                attributes: ["name"],
+            if(category) result = await Product.findAll({
                 through: { attributes: [] },
-                where: {name: category}
-                },
-            });
-            if(brand) result = result.filter(e => e.brand === brand)
+                include: {
+                    model: Categorie,
+                    attributes: ["name"],
+                    through: { attributes: [] },
+                    where: {name: category}
+                    },
+                });
+            if (brand) result = await result.filter((e) => e.brand === brand)
             if(alpha) result = await orderName(result, alpha)
             if(price) result = await orderPrice(result, price)
             if(rating) result = await orderRating(result, rating)
-            res.send(result)
+            res.send(result? result : "No hay resultados")
         } 
         catch (error) {
         console.log(error);

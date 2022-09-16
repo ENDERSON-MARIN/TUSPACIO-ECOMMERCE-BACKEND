@@ -54,7 +54,7 @@ router.get("/productType", getProductType);
 router.post("/", createProduct);
 
 /* UPDATE PRODUCT IN THE DATABASE */
-router.put("/:id", validator.params(paramsSchema), validator.body(bodySchema), updateProduct);
+router.put("/:id", updateProduct);
 
 /* DISABLED PRODUCT IN THE DATABASE */
 router.delete("/:id", validator.params(paramsSchema), disableProduct);
