@@ -78,11 +78,11 @@ const updateUser = async (req, res, next) => {
       address,
       status,
       rol_id } = req.body;
-
     /* BUSCO EL USER EN LA BD POR EL ID */
     const userDb = await User.findByPk(id);
+
     /* ACTUALIZO EL USER */
-    const updatedUser = await userDb.update({
+    await userDb.update({
       nickname,
       name,
       email,
@@ -93,10 +93,7 @@ const updateUser = async (req, res, next) => {
       status,
       rol_id,
     });
-    res.status(200).json({
-      succMsg: "User Updated Successfully!",
-      updatedUser,
-    });
+  res.status(200).json({msg: "User Updated Successfully!"});
   } catch (error) {
     next(error);
   }
@@ -169,5 +166,5 @@ module.exports = {
     deleteUser,
     addFavorite,
     deleteFavorite,
-    getAllFavorites,
+    getAllFavorites
 };
