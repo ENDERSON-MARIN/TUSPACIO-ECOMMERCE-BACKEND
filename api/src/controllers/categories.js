@@ -3,9 +3,9 @@ const { Categorie, Product } = require("../db");
 /* GET ALL CATEGORIES FROM DB */
 const getAllCategories = async (req, res, next) => {
   try {
-    const { name } = req.query;
+    const { categorie, brand } = req.query;
 
-    const allCategories = await Categorie?.findAll({
+    let allCategories = await Categorie?.findAll({
       attributes: ["id", "name"],
       include: {
         model: Product,
@@ -15,33 +15,25 @@ const getAllCategories = async (req, res, next) => {
         // },
       },
     });
-
-    if (name) {
-      const categoriesFilters = allCategories.filter((c) =>
-        c.name.toLowerCase().includes(name.toLowerCase())
-      );
-      console.log(categoriesFilters);
-
-      if (categoriesFilters.length) {
-        return res.status(200).json({
-          ok: true,
-          categoriesFilters,
-        });
-      } else {
+    if (brand) {
+       allCategories = await allCategories.map((e) => e = { 
+        id : e.id,
+        name : e.name,
+        products: e.products.filter((p) => p.brand === brand)
+       })
+    }
+    if (categorie) {
+         allCategories = await allCategories.filter((c) =>
+        c.name === categorie)
+    }
+    res.status(200).send(allCategories);
+  } catch (error) {
         return res.status(404).json({
           ok: false,
           msg: "Category not Found!",
         });
       }
-    }
-    res.status(200).json({
-      ok: true,
-      allCategories,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
+    };
 
 /* CREATE NEW CATEGORY IN THE DATABASE */
 const createCategory = async (req, res, next) => {
