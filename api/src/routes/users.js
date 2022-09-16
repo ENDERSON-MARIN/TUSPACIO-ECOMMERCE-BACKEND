@@ -37,7 +37,7 @@ const {
   deleteUser,
   addFavorite,
   deleteFavorite,
-  getAllFavorites
+  getAllFavorites,
 } = require("../controllers/users");
     
 const router = Router();
@@ -50,7 +50,7 @@ router.get("/", getAllUsers);
 /* CREATE NEW PRODUCT IN THE DATABASE */
 router.post("/", createUser);
 
-/* UPDATE PRODUCT IN THE DATABASE */
+/* UPDATE USER IN THE DATABASE */
 router.put(
   "/:id",
   validator.params(paramsSchema),
