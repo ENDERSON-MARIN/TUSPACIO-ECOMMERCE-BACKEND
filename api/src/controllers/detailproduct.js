@@ -1,4 +1,4 @@
-const { Product, Categorie, Ofert } = require("../db");
+const { Product, Categorie, Ofert, Review } = require("../db");
 const axios = require("axios")
 const { URL_API } = require("./globalConst")
 
@@ -7,39 +7,32 @@ const { URL_API } = require("./globalConst")
 const getDetailProduct = async (req, res, next) => {
     const id = req.params.id;
 
-    const resp = await axios.get(URL_API + "/products")
-    const detail = resp.data
     try {
-        if(id.length < 8) {
-            let productDetail = detail.find(e => e.id == id)
-            res.send(productDetail);}
-        else {
-            const dbInfo = await Product.findAll({
-                    include: {
-                         model: Categorie,
-                        attributes: ["name"], 
-                        through: { attributes: [] },
-
-                    },
-                    include: {
-                        model: Ofert,
-                        attributes: ["startDate", "endDate", "status", "description", "discountPercent"],
-                        through: { attributes: [] },
-                    },
-                                    
-               })
-              let productDetail = await dbInfo.find(p => p.id === id)
+            const dbInfo = await Product.findOne({
+                where: { id },
+                include: {
+                    model: Categorie,
+                    attributes: ["name"],
+                    through: { attributes: [] },
+                },
+            });
+            const results = await Review.findAll({
+                where: { product_id: id },
+            
+            });
+            const reviews = results.map(e => ({
+                title: e.title,
+                text: e.text,
+                score: e.score,
                 
-             
-              res.send(productDetail);
-            }
-                } catch (error) {
-                    next(error);
-                }
-            }
+            }))
+       
+            res.send({dbInfo, reviews});
+           } catch (error) {
+             console.log(error);
+         }
+     };
         
-        module.exports = {
-            getDetailProduct
-        };
+module.exports = {getDetailProduct};
 
 
