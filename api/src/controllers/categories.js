@@ -3,7 +3,7 @@ const { Categorie, Product } = require("../db");
 /* GET ALL CATEGORIES FROM DB */
 const getAllCategories = async (req, res, next) => {
   try {
-    const { categorie, brand } = req.query;
+    const { brand } = req.query;
 
     let allCategories = await Categorie?.findAll({
       attributes: ["id", "name"],
@@ -15,16 +15,10 @@ const getAllCategories = async (req, res, next) => {
         // },
       },
     });
-    if (brand) {
-       allCategories = await allCategories.map((e) => e = { 
-        id : e.id,
-        name : e.name,
-        products: e.products.filter((p) => p.brand === brand)
-       })
-    }
-    if (categorie) {
-         allCategories = await allCategories.filter((c) =>
-        c.name === categorie)
+ if (brand) {
+       allCategories = await allCategories.filter((e) => 
+        e.products.find((p) => p.brand === brand)?
+        e = {id: e.id, name: e.name}: null)
     }
     res.status(200).send(allCategories);
   } catch (error) {
