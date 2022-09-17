@@ -68,36 +68,6 @@ const getOrdersByUserId = async (req, res, next) => {
   }
 };
 
-/* CREATE NEW ORDER IN THE DATABASE */
-/*const createOrder = async (req, res, next) => {
-  try {
-    const {
-            value, 
-            status,
-            user_id,
-            products_id,
-        } = req.body;
-    
-    const userDb = await User.findByPk(user_id);
-
-    const newOrder = await Order.create({
-        value,
-        status,
-        user_id: userDb.id,
-    });
- 
-    const productsDb = await Product.findAll({  
-        where: { id: products_id },
-    });
-    await newOrder.addProduct(productsDb);
-    res.status(200).json({
-      succMsg: "Order Created Successfully!",
-      newOrder,
-    });
-  } catch (error) {
-    next(error);
-  }
-};*/
 
 /* CREATE NEW ORDER IN THE DATABASE WTIH STRIPE INFORMATION*/
 //Create Order
@@ -141,34 +111,6 @@ const updateOrder = async (customer, data, lineItems) => {
   }
 };
 
-/* UPDATE ONE ORDER IN THE DATABASE */
-/*const updateOrder = async (req, res, next) => {
-  const { id } = req.params;
-
- /* try {
-    /* BUSCO LA ORDER EN LA BD POR EL ID */
-    /*let orderDB = await Order.findOne({
-      where: {
-        number: id,
-      },
-    });
-    //console.log(orderDB)
-    /* ACTUALIZO LA ORDER CON LOS DATOS QUE RECIBO DEL BODY */
-    /*const updatedOrder = await orderDB.update({
-        //value,
-        status//,
-        //user_id,
-        //products_id,
-    });
-    res.status(200).send({
-      msg: "Order Status Updated Successfully!",
-      updatedOrder,
-    });
-  } catch (error) {
-    //next(error);
-    console.log(error);
-  }
-};*/
 
 
 /* DELETE ONE ORDER IN THE DATABASE */
