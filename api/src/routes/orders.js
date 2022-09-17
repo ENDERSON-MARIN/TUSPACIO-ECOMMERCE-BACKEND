@@ -25,6 +25,7 @@ const bodySchema = Joi.object({
 
 const {
     getAllOrders,
+    getLimitOrders,
     getOneOrder,
     getOrdersByStatus,
     getOrdersByUserId,
@@ -38,6 +39,9 @@ const router = Router();
 
 /* GET ALL PRODUCTS FRONT THE DATABASE */
 router.get("/", getAllOrders);
+
+/* GET LIMIT ORDERS FROM THE BOARD DATABASE */
+router.get("/dashbord", getLimitOrders);
 
 /* GET ONE ORDER FRONT THE DATABASE */
 router.get("/:id", validator.params(paramsSchema), getOneOrder);
