@@ -4,6 +4,7 @@ const { User, Rol, Product } = require("../db");
 const axios = require("axios");
 const { URL_API } = require("./globalConst");
 const { Op } = require("sequelize")
+
 /* GET ALL USERS FROM DB */
 
 const getAllUsers = async (req, res) => {
@@ -15,6 +16,18 @@ const getAllUsers = async (req, res) => {
   }
 };
 
+/* GET ONE USER FROM DB */
+const getOneUsers = async (req, res) => {
+  try {
+    const dbUserInfo = await User.findOne({
+    where: { id: req.params.id
+    }})
+    res.send(dbUserInfo)
+  } catch (error) {
+    res.send({message: error.message})
+  }
+}
+
 /* CREATE NEW USER IN THE DATABASE */
 const createUser = async (req, res, next) => {
   /* ME TRAIGO TODOS LOS VALORES DEL CUERPO DE LA PETICION */
@@ -25,7 +38,6 @@ const createUser = async (req, res, next) => {
     email_verified,
     picture,
     sid,
-    status
   } = req.body
   try {
     // BUSCAR EL ID DEL ROL
@@ -52,7 +64,6 @@ const createUser = async (req, res, next) => {
         email_verified,
         sid,
         picture,
-        status,
         rol_id: roleid
       })
       res.send(user);
@@ -80,11 +91,11 @@ const updateUser = async (req, res, next) => {
       address,
       status,
       rol_id } = req.body;
-
     /* BUSCO EL USER EN LA BD POR EL ID */
     const userDb = await User.findByPk(id);
+
     /* ACTUALIZO EL USER */
-    const updatedUser = await userDb.update({
+    await userDb.update({
       nickname,
       name,
       email,
@@ -95,10 +106,7 @@ const updateUser = async (req, res, next) => {
       status,
       rol_id,
     });
-    res.status(200).json({
-      succMsg: "User Updated Successfully!",
-      updatedUser,
-    });
+  res.status(200).json({msg: "User Updated Successfully!"});
   } catch (error) {
     next(error);
   }
@@ -166,10 +174,11 @@ const getAllFavorites = async (req, res) => {
 
 module.exports = {
     getAllUsers,
+    getOneUsers,
     createUser,
     updateUser,
     deleteUser,
     addFavorite,
     deleteFavorite,
-    getAllFavorites,
+    getAllFavorites
 };
