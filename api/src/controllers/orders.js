@@ -53,23 +53,27 @@ const getOrdersByStatus = async (req, res, next) => {
 };
 
 /* GET ORDERS BY USER ID */
-const getOrdersByUserId = async (req, res, next) => {
-  const { user_id } = req.params;
+
+const getOrdersByUserId = async (req, res, next) =>
+{
+  const { id } = req.params;
   try {
     const dbInfo = await Order.findAll({
-      where: { user_id },
-      include: {
-        model: Product,
-        attributes: ["id", "name", "price"],
-        through: { attributes: [] },
-      },
+      attributes: ["number", "userId", "orderProducts", "total", "updatedAt","status"],
+      where: { 
+        userId: id ,
+        number: {
+          [Op.ne]: null
+      }
+    },
     });
     res.send(dbInfo);
   } catch (error) {
     console.log(error);
   }
 };
-/******************************************************************************** */
+
+/* GET LIMIT ORDERS DASHBOARD*/
 const getLimitOrders = async (req, res, next) => {
   try {
     const dbInfo = await Order.findAll({

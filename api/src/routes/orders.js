@@ -50,7 +50,7 @@ router.get("/:id", validator.params(paramsSchema), getOneOrder);
 router.get("/status/:status", getOrdersByStatus);
 
 /* GET ALL ORDERS BY USER ID FRONT THE DATABASE */
-router.get("/user/:user_id", getOrdersByUserId);
+router.get("/user/:id", getOrdersByUserId);
 
 /* CREATE NEW ORDER IN THE DATABASE */
 router.post("/", createOrder);
