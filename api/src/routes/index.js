@@ -8,10 +8,14 @@ const ratingRoute = require("./ratingproducts.js");
 const productsNameRoute = require("./productsName.js");
 const orderPriceRoute = require("./orderByPrice.js");
 const brandProductsRoute = require("./productsBrand.js");
+
 const orderNameRoute = require("./orderByName.js");
 const orderCombineRoute = require("./orderCombine.js");
 const orderRoute = require("./updateOrderStatus.js");
 const ofertsRoute = require("./oferts.js");
+
+const updateStock = require("./updateStock.js");
+
 const loginRoute = require("./authorization/login.js");
 const categoriesRoute = require("./categories");
 const oneCategoriesRoute = require("./oneCategorie.js");
@@ -44,6 +48,11 @@ router.use("/products/orderName/", orderNameRoute);
 router.use("/products/orderCombine/", orderCombineRoute);
 router.use("/products/oferts", ofertsRoute);
 router.use("/products/reviews", reviewsRoute);
+
+/*_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+                RUTA DE CONTROL DE STOCK
+_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/*/
+router.use("/controlstock", updateStock)
 
 /*_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
                 RUTAS DE CATEGORIES
