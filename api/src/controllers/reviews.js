@@ -1,4 +1,4 @@
-const { Product, Review } = require("../db");
+const { Product, Review, User } = require("../db");
 const axios = require("axios");
 const { URL_API } = require("./globalConst");
 
@@ -48,15 +48,17 @@ const createReview = async (req, res, next) => {
             text,
             score,
             product_id,
+            user_id
         } = req.body;
     
     const productDb = await Product.findByPk(product_id);
-
+    const userDb = await User.findByPk(user_id);
     const newReview = await Review.create({
         title,
         text,
         score,
         product_id: productDb.id,
+        user_id: userDb.id
     });
  
     res.status(200).json({

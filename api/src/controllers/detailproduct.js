@@ -24,6 +24,7 @@ const getDetailProduct = async (req, res, next) => {
                 title: e.title,
                 text: e.text,
                 score: e.score,
+                user_id: e.user_id,
                 
             }))
        

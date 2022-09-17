@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const {Product} = require('./Product')
+const {Product, User} = require('./Product')
 module.exports = (sequelize) => {
   sequelize.define('review', {
     title: {
@@ -28,5 +28,13 @@ module.exports = (sequelize) => {
         key: "id",
       },
     },
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: User,
+        key: "id",
+    }
+  },
   });
 };

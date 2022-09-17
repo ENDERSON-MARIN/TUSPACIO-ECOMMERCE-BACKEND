@@ -21,6 +21,7 @@ const bodySchema = Joi.object({
   text: Joi.string(),
   score: Joi.number().min(1).max(5).precision(1).required(),
   product_id: Joi.number().min(1).required(),
+  user_id: Joi.number().min(1).required(),
 });
 
 const {
