@@ -1,4 +1,6 @@
 const { updateOrder } = require("./orders");
+
+const { sendMail } = require("../helpers/sendMail");
 //Checkout
 const stripe = require("stripe")(
   "sk_test_51Les4YKH7XmQskrVxo1Th9dZWzcjEynmqRUGSXByXhtBh7JbT3Zhvg4JATIIJAKP0XxhPkT1dLO9UdHDhoEiQKm100gdCLwxqr"
@@ -97,7 +99,10 @@ const Checkout = async (req, res) => {
     success_url: `${CLIENT}/checkout/success`,
     cancel_url: `${CLIENT}/cart`,
   });
-  res.send({ url: session.url });
+  res.send(
+    sendMail((name = "Enderson Marín"), (email = "marinenderson1@gmail.com")),
+    { url: session.url }
+  );
 };
 //
 
@@ -139,6 +144,10 @@ const webhook = (req, res) => {
           function (err, lineItems) {
             console.log(customer, data, lineItems);
             updateOrder(customer, data, lineItems);
+            sendMail(
+              (name = "Enderson Marín"),
+              (email = "marinenderson1@gmail.com")
+            );
           }
         );
       })
