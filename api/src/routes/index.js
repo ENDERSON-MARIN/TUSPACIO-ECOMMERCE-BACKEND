@@ -17,22 +17,15 @@ const ofertsRoute = require("./oferts.js");
 const updateStock = require("./updateStock.js");
 
 const loginRoute = require("./authorization/login.js");
-
 const categoriesRoute = require("./categories");
 const oneCategoriesRoute = require("./oneCategorie.js");
 const ordersRoute = require("./orders");
 const usersRoute = require("./users");
-
 const checkoutRoute = require("./checkout.js");
-
-
 const reviewsRoute = require('./reviews.js')    
-
-
 const rolesRoute = require("./roles.js");
-
-
 const sendEmail = require("./testSendEmail");
+const userRoute = require("./updateUserRole.js");
 
 const router = Router();
 
@@ -77,6 +70,7 @@ router.use("/order", orderRoute)
                 RUTAS DE USERS                                                                  
 _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/*/
 router.use("/users", usersRoute);
+router.use("/user", userRoute )
 
 /*_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_ /_/_/_/_/_/_/_/_/_/_/_/_/_/_/_ /_/_/_/_/_/_/_/_/_/_/_/_/_/_/_ 
 RUTAS DE ROL                                                                  
