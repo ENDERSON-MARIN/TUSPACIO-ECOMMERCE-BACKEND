@@ -1,10 +1,11 @@
 const { Product, Order, User } = require("../db");
 const axios = require("axios");
-const { URL_API } = require("./globalConst");
+const { Op } = require("sequelize");
 
 /* GET ALL ORDERS FROM DB */
 
-const getAllOrders = async (req, res) => {
+const getAllOrders = async (req, res) =>
+{
   try {
     const dbInfo = await Order.findAll({
       /*include: {
@@ -20,7 +21,8 @@ const getAllOrders = async (req, res) => {
 };
 
 /* GET ONE ORDER FROM DB */
-const getOneOrder = async (req, res, next) => {
+const getOneOrder = async (req, res, next) =>
+{
   const { id } = req.params;
   try {
     const dbInfo = await Order.findOne({
@@ -33,75 +35,82 @@ const getOneOrder = async (req, res, next) => {
 };
 
 /* GET ORDERS BY STATUS */
-const getOrdersByStatus = async (req, res, next) => {
+const getOrdersByStatus = async (req, res, next) =>
+{
   const { status } = req.params;
   try {
     const dbInfo = await Order.findAll({
       where: { status },
       include: {
         model: Product,
-        attributes: ["id", "name", "price" ],
-            through: { attributes: [] },
+        attributes: ["id", "name", "price"],
+        through: { attributes: [] },
       },
     });
-    res.send( dbInfo)
+    res.send(dbInfo)
   } catch (error) {
     console.log(error);
   }
 };
 
 /* GET ORDERS BY USER ID */
-const getOrdersByUserId = async (req, res, next) => {
+const getOrdersByUserId = async (req, res, next) =>
+{
   const { user_id } = req.params;
   try {
     const dbInfo = await Order.findAll({
       where: { user_id },
       include: {
         model: Product,
-        attributes: ["id", "name", "price" ],
-            through: { attributes: [] },
+        attributes: ["id", "name", "price"],
+        through: { attributes: [] },
       },
     });
-    res.send( dbInfo)
+    res.send(dbInfo)
   } catch (error) {
     console.log(error);
   }
 };
-
-/* CREATE NEW ORDER IN THE DATABASE */
-/*const createOrder = async (req, res, next) => {
+/******************************************************************************** */
+const getLimitOrders = async (req, res, next) =>
+{
   try {
-    const {
-            value, 
-            status,
-            user_id,
-            products_id,
-        } = req.body;
-    
-    const userDb = await User.findByPk(user_id);
+    const dbInfo = await Order.findAll({
+      attributes: ["number", "status", "shipping", "orderProducts", "total" ,"updatedAt" ],
+      where: {
+        number: {
+            [Op.ne]: null
+        }
+      },
+      limit: 10,
+      include: {
+        model: User,
+        attributes: ["name", "id"],
+      },
+      order: [['updatedAt', 'DESC']],
+    })
+    const dbLastOrders = dbInfo.map(e=>  { 
+      return {
+        number: e.number,
+        status: e.status,
+        address: e.shipping.address.country,
+        products:  e.orderProducts.id,
+        total: e.total,
+        date: e.updatedAt
+      }
+    })
 
-    const newOrder = await Order.create({
-        value,
-        status,
-        user_id: userDb.id,
-    });
- 
-    const productsDb = await Product.findAll({  
-        where: { id: products_id },
-    });
-    await newOrder.addProduct(productsDb);
-    res.status(200).json({
-      succMsg: "Order Created Successfully!",
-      newOrder,
-    });
+    res.send(dbLastOrders )
+
   } catch (error) {
-    next(error);
+    res.send({ message: error.message })
   }
-};*/
+}
 
 /* CREATE NEW ORDER IN THE DATABASE WTIH STRIPE INFORMATION*/
 //Create Order
-const createOrder = async (req, res) => {
+const createOrder = async (req, res) =>
+{
   try {
     const newOrder = await Order.create({
       userId: req.body.user,
@@ -117,7 +126,8 @@ const createOrder = async (req, res) => {
 };
 //
 // UPDATE ONE ORDER IN THE DATABASE FROM STRIPE //
-const updateOrder = async (customer, data, lineItems) => {
+const updateOrder = async (customer, data, lineItems) =>
+{
   try {
     let temp = await Order.findOne({
       order: [
@@ -125,63 +135,35 @@ const updateOrder = async (customer, data, lineItems) => {
       ]
     });
     const updatedOrder = await Order.update({
-      number: customer.invoice_prefix ,
+      number: customer.invoice_prefix,
       status: 'created',
       subtotal: data.amount_subtotal,
       shipping: data.customer_details,
       total: data.amount_total,
     }, {
-    where: { 
-      id: temp.id
-    }
+      where: {
+        id: temp.id
+      }
     });
     console.log("Successfully updated!")
   } catch (error) {
-        console.log(error);
+    console.log(error);
   }
 };
 
-/* UPDATE ONE ORDER IN THE DATABASE */
-/*const updateOrder = async (req, res, next) => {
-  const { id } = req.params;
-
- /* try {
-    /* BUSCO LA ORDER EN LA BD POR EL ID */
-    /*let orderDB = await Order.findOne({
-      where: {
-        number: id,
-      },
-    });
-    //console.log(orderDB)
-    /* ACTUALIZO LA ORDER CON LOS DATOS QUE RECIBO DEL BODY */
-    /*const updatedOrder = await orderDB.update({
-        //value,
-        status//,
-        //user_id,
-        //products_id,
-    });
-    res.status(200).send({
-      msg: "Order Status Updated Successfully!",
-      updatedOrder,
-    });
-  } catch (error) {
-    //next(error);
-    console.log(error);
-  }
-};*/
-
 
 /* DELETE ONE ORDER IN THE DATABASE */
-const deleteOrder = async (req, res, next) => {
+const deleteOrder = async (req, res, next) =>
+{
   try {
     const { id } = req.params;
     /* BUSCO LA ORDER EN LA BD POR EL ID */
     let orderDB = await Order.findOne({
-      where: { id: id}
+      where: { id: id }
     });
     /* ELIMINO LA ORDER */
     await orderDB.destroy();
-    res.status(200).send({succMsg: "Order Deleted Successfully!"});
+    res.status(200).send({ succMsg: "Order Deleted Successfully!" });
   } catch (error) {
     next(error);
   }
@@ -189,11 +171,12 @@ const deleteOrder = async (req, res, next) => {
 
 
 module.exports = {
-    getAllOrders,
-    getOneOrder,
-    getOrdersByStatus,
-    getOrdersByUserId,
-    createOrder,
-    updateOrder,
-    deleteOrder,
+  getAllOrders,
+  getLimitOrders,
+  getOneOrder,
+  getOrdersByStatus,
+  getOrdersByUserId,
+  createOrder,
+  updateOrder,
+  deleteOrder,
 };

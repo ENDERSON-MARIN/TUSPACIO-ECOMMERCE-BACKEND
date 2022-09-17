@@ -1,4 +1,3 @@
-const { Product } = require("../db");
 const axios = require("axios")
 const { URL_API } = require("./globalConst")
 
@@ -7,7 +6,7 @@ const { URL_API } = require("./globalConst")
 const getSearchProducts = async (req, res, next) => {
     const { categorie, product_type, name } = req.query;
 
-    const resp = await axios.get(URL_API)
+    const resp = await axios.get(URL_API + "/products")
     const dataApi = resp.data
     
 

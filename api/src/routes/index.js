@@ -8,28 +8,24 @@ const ratingRoute = require("./ratingproducts.js");
 const productsNameRoute = require("./productsName.js");
 const orderPriceRoute = require("./orderByPrice.js");
 const brandProductsRoute = require("./productsBrand.js");
+
 const orderNameRoute = require("./orderByName.js");
 const orderCombineRoute = require("./orderCombine.js");
 const orderRoute = require("./updateOrderStatus.js");
 const ofertsRoute = require("./oferts.js");
 
-const loginRoute = require("./authorization/login.js");
+const updateStock = require("./updateStock.js");
 
+const loginRoute = require("./authorization/login.js");
 const categoriesRoute = require("./categories");
 const oneCategoriesRoute = require("./oneCategorie.js");
 const ordersRoute = require("./orders");
 const usersRoute = require("./users");
-
 const checkoutRoute = require("./checkout.js");
-
-
 const reviewsRoute = require('./reviews.js')    
-
-
 const rolesRoute = require("./roles.js");
-
-
 const sendEmail = require("./testSendEmail");
+const userRoute = require("./updateUserRole.js");
 
 const router = Router();
 
@@ -54,6 +50,11 @@ router.use("/products/oferts", ofertsRoute);
 router.use("/products/reviews", reviewsRoute);
 
 /*_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+                RUTA DE CONTROL DE STOCK
+_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/*/
+router.use("/controlstock", updateStock)
+
+/*_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
                 RUTAS DE CATEGORIES
 _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/*/
 router.use("/categorie", oneCategoriesRoute);
@@ -69,6 +70,7 @@ router.use("/order", orderRoute)
                 RUTAS DE USERS                                                                  
 _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/*/
 router.use("/users", usersRoute);
+router.use("/user", userRoute )
 
 /*_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_ /_/_/_/_/_/_/_/_/_/_/_/_/_/_/_ /_/_/_/_/_/_/_/_/_/_/_/_/_/_/_ 
 RUTAS DE ROL                                                                  

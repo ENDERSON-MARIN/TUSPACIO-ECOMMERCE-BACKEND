@@ -35,7 +35,7 @@ module.exports = (sequelize) => {
     status: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      defaultValue: false,
+      defaultValue: true,
     },  
     rol_id: {
       type: DataTypes.INTEGER,
