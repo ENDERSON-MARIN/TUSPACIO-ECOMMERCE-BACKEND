@@ -41,7 +41,7 @@ const router = Router();
 router.get("/", getAllOrders);
 
 /* GET LIMIT ORDERS FROM THE BOARD DATABASE */
-router.get("/dashbord", getLimitOrders);
+router.get("/dashboard", getLimitOrders);
 
 /* GET ONE ORDER FRONT THE DATABASE */
 router.get("/:id", validator.params(paramsSchema), getOneOrder);
