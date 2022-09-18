@@ -27,7 +27,9 @@ const bodySchema = Joi.object({
 const {
     updateRatingOfAProduct,
     getOneReview,
+    getAllUserReviews,
     createReview,
+
     
 } = require("../controllers/reviews");
 const router = Router();
@@ -39,6 +41,10 @@ router.get("/productId/:product_id", updateRatingOfAProduct);
 
 /* GET ONE REVIEW FROM THE DATABASE */
 router.get("/reviewId/:id", validator.params(paramsSchema), getOneReview);
+
+/* GET ALL USER REVIEWS */
+
+router.get("/userId/:user_id", getAllUserReviews)
 
 /* CREATE NEW ORDER IN THE DATABASE */
 router.post("/", validator.body(bodySchema), createReview);

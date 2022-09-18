@@ -39,6 +39,18 @@ const getOneReview = async (req, res, next) => {
     }
 };
 
+/* GET ALL REVIEWS FROM A USER */
+const getAllUserReviews = async (req, res, next) => {
+  const {user_id} = req.params;
+  try {
+    const dbInfo = await Review.findAll({
+      where: {user_id}
+    })
+    res.send(dbInfo)
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 /* CREATE NEW REVIEW IN THE DATABASE */
 const createReview = async (req, res, next) => {
@@ -73,5 +85,6 @@ const createReview = async (req, res, next) => {
 module.exports = {
     updateRatingOfAProduct,
     getOneReview,
+    getAllUserReviews,
     createReview,   
 };
