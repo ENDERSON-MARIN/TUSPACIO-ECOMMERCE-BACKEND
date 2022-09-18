@@ -33,7 +33,7 @@ const router = Router();
 router.get("/", getAllCategories);
 
 /* CREATE NEW CATEGORY IN THE DATABASE */
-router.post("/", validator.body(bodySchema), createCategory);
+router.post("/", createCategory);
 
 /* UPDATE CATEGORY IN THE DATABASE */
 router.put("/:id", validator.params(paramsSchema), updateCategory);
