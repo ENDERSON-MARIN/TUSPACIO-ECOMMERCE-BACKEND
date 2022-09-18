@@ -10,7 +10,7 @@ const getProductsBrand = async (req, res, next) => {
 
     try {
         const api = await axios(URL_API + "/products")
-        let e = api.data;      
+        let e = api.data; 
         if(categorie){ e = e.filter(c => 
         c.categories.find(e => e.name === categorie)?
         c = {brand: c.brand} : null)}

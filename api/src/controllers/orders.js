@@ -81,7 +81,6 @@ const getLimitOrders = async (req, res, next) => {
         "number",
         "status",
         "shipping",
-        "orderProducts",
         "total",
         "updatedAt",
       ],
@@ -101,10 +100,9 @@ const getLimitOrders = async (req, res, next) => {
       return {
         number: e.number,
         status: e.status,
-        address: e.shipping.address.country,
-        products: e.orderProducts.id,
         total: e.total,
         date: e.updatedAt,
+        shipping: e.shipping
       };
     });
 
