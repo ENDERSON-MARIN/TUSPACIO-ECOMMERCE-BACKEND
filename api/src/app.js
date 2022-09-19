@@ -24,14 +24,21 @@ const server = express();
 
 server.name = 'API';
 
-const whiteList = [
-  'http://localhost:3000', 
-  'http://localhost:3001', 
-  'https://tuspacio.herokuapp.com',
-  'https://tuspacio.vercel.app'
-]
+// const whiteList = [
+//   'http://localhost:3000', 
+//   'http://localhost:3001', 
+//   'https://tuspacio.herokuapp.com',
+//   'https://tuspacio.herokuapp.com/*',
+//   'https://tuspacio.vercel.app',
+//   'https://tuspacio.vercel.app/*',
+//   'https://tuspacio.herokuapp.com/api',
+//   'https://tuspacio.herokuapp.com/api/*',
+//   'https://tuspacio.herokuapp.com/api/checkout',
+  
+// ]
 
-server.use(cors({ origin: whiteList }));
+server.use(cors());
+
 server.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 server.use(bodyParser.json({ limit: '50mb' }));
 server.use(cookieParser());
