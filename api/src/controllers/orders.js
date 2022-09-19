@@ -62,9 +62,9 @@ const getOrdersByUserId = async (req, res, next) =>
       attributes: ["number", "userId", "orderProducts", "total", "updatedAt","status"],
       where: { 
         userId: id ,
-        number: {
-          [Op.ne]: null
-      }
+      //   number: {
+      //     [Op.ne]: null
+      // }
     },
     });
     res.send(dbInfo);
