@@ -58,8 +58,6 @@ router.post("/", createUser);
 /* UPDATE USERS IN THE DATABASE */
 router.put(
   "/:id",
-  validator.params(paramsSchema),
-  validator.body(bodySchema),
   updateUser
 );
 
