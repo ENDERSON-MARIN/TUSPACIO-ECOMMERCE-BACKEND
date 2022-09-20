@@ -16,6 +16,7 @@ const getAllProducts = async (req, res, next) => {
       },
     });
     res.send(dbInfo);
+  // res.send("entre")
   } catch (error) {
     console.log(error);
   }
@@ -65,7 +66,7 @@ const createProduct = async (req, res, next) => {
 
     res.status(200).json({
       succMsg: "Product Created Successfully!",
-      newProduct,
+      // newProduct,
     });
   } catch (error) {
     next(error);
