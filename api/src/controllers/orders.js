@@ -156,7 +156,8 @@ const updateOrder = async (customer, data, lineItems) => {
     };
     //envío de email al usuario al realizar la compra
      await transporter.sendMail(emailOrderSuccess());
-    console.log("Orden updated!", temp);
+
+     return res.redirect('https://tuspacio.vercel.app/checkout/success')
   } catch (error) {
     console.log(error);
   }
