@@ -8,17 +8,12 @@ https://github.com/evanshortiss/express-joi-validation#readme
 */
 
 /* SE CREAN LOS OBJETOS CON LOS TIPOS DE VALIDACIONES */
-const querySchema = Joi.object({
-  name: Joi.string().regex(/^[a-zA-Z\s]+$/),
-});
+
 
 const paramsSchema = Joi.object({
   id: Joi.string().regex(/^([a-zA-Z0-9-]+)$/),
 });
 
-const bodySchema = Joi.object({
-  name: Joi.string().min(3).max(100).required(),
-});
 
 const {
   getAllCategories,

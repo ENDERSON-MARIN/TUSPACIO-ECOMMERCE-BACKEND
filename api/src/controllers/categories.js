@@ -9,10 +9,6 @@ const getAllCategories = async (req, res, next) => {
       attributes: ["id", "name"],
       include: {
         model: Product,
-        /* PARA TRAER PRODUCTOS ACTIVOS POR CATEGORIAS */
-        // where: {
-        //   status: true,
-        // },
       },
     });
  if (brand) {
