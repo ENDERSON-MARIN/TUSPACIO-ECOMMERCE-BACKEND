@@ -1,20 +1,31 @@
 require("dotenv").config();
 const nodemailer = require("nodemailer");
 
-const { EMAIL_HOST, EMAIL_PORT, EMAIL_USER, EMAIL_PASS } = process.env;
+// const { EMAIL_HOST, EMAIL_PORT, EMAIL_USER, EMAIL_PASS } = process.env;
 
-const transporter = nodemailer.createTransport({
-  host: EMAIL_HOST,
-  port: EMAIL_PORT,
-  secure: true, // true for 465, false para otros puertos
+ /* TRANSPORTER GMAIL */
+ const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
   auth: {
-    user: EMAIL_USER,
-    pass: EMAIL_PASS,
+    user: "tuspaciopg@gmail.com", 
+    pass: "zbhtcmmcfkokvlpz", 
   },
   tls: {
     rejectUnauthorized: false,
   },
 });
+
+/* TRANSPORTER MAILTRAP */
+// var transporter = nodemailer.createTransport({
+//   host: "smtp.mailtrap.io",
+//   port: 2525,
+//   auth: {
+//     user: "05906f25fea366",
+//     pass: "8968eefbd7b352",
+//   },
+// });
 
 const emailOrderSuccess = function (user, order) {
   return {
