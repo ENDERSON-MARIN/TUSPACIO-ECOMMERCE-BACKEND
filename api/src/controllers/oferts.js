@@ -72,7 +72,7 @@ const updateOfert = async (req, res, next) => {
     } = req.body;
 
     /* BUSCO LA OFERTA EN LA BD POR EL ID */
-    let ofertDB = await ofert.findOne({
+    let ofertDB = await Ofert.findOne({
       where: {
         id: id,
       },
