@@ -27,8 +27,8 @@ const sendEmail = async (name, email) => {
       port: 2525,
       auth: {
         user: "05906f25fea366",
-        pass: "8968eefbd7b352",
-      },
+        pass: "8968eefbd7b352"
+      }
     });
 
     const info = await transport.sendMail({
@@ -38,7 +38,7 @@ const sendEmail = async (name, email) => {
       html: contentHTML,
     });
 
-    //console.log("Email Send", info);
+    console.log("Email Send", info);
 
     res.status(200).json({
       ok: true,
