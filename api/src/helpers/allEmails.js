@@ -4,28 +4,28 @@ const nodemailer = require("nodemailer");
 // const { EMAIL_HOST, EMAIL_PORT, EMAIL_USER, EMAIL_PASS } = process.env;
 
  /* TRANSPORTER GMAIL */
- const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: "tuspaciopg@gmail.com", 
-    pass: "zbhtcmmcfkokvlpz", 
-  },
-  tls: {
-    rejectUnauthorized: false,
-  },
-});
-
-/* TRANSPORTER MAILTRAP */
-// var transporter = nodemailer.createTransport({
-//   host: "smtp.mailtrap.io",
-//   port: 2525,
+//  const transporter = nodemailer.createTransport({
+//   host: "smtp.gmail.com",
+//   port: 465,
+//   secure: true,
 //   auth: {
-//     user: "05906f25fea366",
-//     pass: "8968eefbd7b352",
+//     user: "tuspaciopg@gmail.com", 
+//     pass: "zbhtcmmcfkokvlpz", 
+//   },
+//   tls: {
+//     rejectUnauthorized: false,
 //   },
 // });
+
+/* TRANSPORTER MAILTRAP */
+var transporter = nodemailer.createTransport({
+  host: "smtp.mailtrap.io",
+  port: 2525,
+  auth: {
+    user: "05906f25fea366",
+    pass: "8968eefbd7b352",
+  },
+});
 
 const emailOrderSuccess = function (user, order) {
   return {
