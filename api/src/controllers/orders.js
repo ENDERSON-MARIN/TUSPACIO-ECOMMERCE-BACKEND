@@ -150,7 +150,7 @@ const updateOrder = async (customer, data, lineItems) => {
         },
       }
     );
-    sendMail(temp.shipping.name, temp.shipping.email)
+    await sendMail(temp.shipping.name, temp.shipping.email)
     console.log("Successfully updated!");
   } catch (error) {
     console.log(error);
