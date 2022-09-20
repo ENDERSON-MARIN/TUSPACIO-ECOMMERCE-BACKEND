@@ -155,7 +155,7 @@ const updateOrder = async (customer, data, lineItems) => {
       email:updatedOrder.shipping.email,
     };
     //envío de email al usuario al realizar la compra
-     await transporter.sendMail(emailOrderSuccess(user, updatedOrder));
+     await transporter.sendMail(emailOrderSuccess());
     console.log("Orden updated!", temp);
   } catch (error) {
     console.log(error);
