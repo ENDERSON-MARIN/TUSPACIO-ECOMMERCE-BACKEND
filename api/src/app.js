@@ -30,6 +30,7 @@ const whiteList = [
   'https://pg-tuspacio.up.railway.app/',
   'https://pg-tuspacio.up.railway.app/',
   'https://tuspacio.vercel.app',
+  'https://tuspacio.vercel.app/cart',
   'https://tuspacio.vercel.app/*',
   'https://pg-tuspacio.up.railway.app/api',
   'https://pg-tuspacio.up.railway.app/api/*',
