@@ -101,7 +101,7 @@ const updateProduct = async (req, res, next) => {
       },
     });
     /* ACTUALIZO EL PRODUCT CON LOS DATOS QUE RECIBO DEL BODY */
-    const updatedProduct = await productDB.update({
+    await productDB.update({
       brand,
       name,
       price,
@@ -116,17 +116,27 @@ const updateProduct = async (req, res, next) => {
       product_colors,
       status
     });
-    const categoriesDb = await Categorie.findAll({
-      where: { name: categories },
-    });
-    updatedProduct.addCategorie(categoriesDb);
-    
+    // if(categories){
+    // const categoriesDb = await Categorie.findAll({
+    //   where: { name: categories }, 
+    // });
+    // updatedProduct.addCategorie(categoriesDb);
+    // }
+
+    const productModified = await Product.findByPk(id,{
+      include: { 
+        model: Categorie ,
+        attributes: ["name"],
+        through: { attributes: [] },
+      }
+    })
     res.status(200).send({
       succMsg: "Product Updated Successfully!",
-      updatedProduct,
+      productModified,
     });
   } catch (error) {
-    next(error);
+    // next(error);
+    res.status(400).send({message: error.message})
   }
 };
 
