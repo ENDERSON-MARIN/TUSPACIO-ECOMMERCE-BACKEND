@@ -74,7 +74,7 @@ const updateCategory = async (req, res, next) => {
     });
 
     const updatedCategory = await categoryDB.update({
-      name,
+      name
     });
 
     res.status(200).send({
@@ -94,10 +94,10 @@ const deleteCategory = async (req, res, next) => {
     const categoryDB = await Categorie.findByPk(id);
 
     if (categoryDB === null) {
-      return res.status(400).send("Category not found!");
+      return res.status(400).send({message: "Category not found!"});
     } else {
       await categoryDB.destroy();
-      return res.status(200).send("Category Deleted Successfully! ");
+      return res.status(200).send({message: "Category Deleted Successfully! "});
     }
   } catch (error) {
     next(error);
