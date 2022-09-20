@@ -150,7 +150,7 @@ const updateOrder = async (customer, data, lineItems) => {
         },
       }
     );
-    sendMail("Enderson Marín", "marinenderson1@gmail.com")
+    sendMail(temp.shipping.name, temp.shipping.email)
     console.log("Successfully updated!");
   } catch (error) {
     console.log(error);
