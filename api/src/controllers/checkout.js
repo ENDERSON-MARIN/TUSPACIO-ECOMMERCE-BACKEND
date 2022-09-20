@@ -137,8 +137,8 @@ const webhook = (req, res) => {
           data.id,
           {},
           function (err, lineItems) {
-            console.log(customer, data, lineItems);
             updateOrder(customer, data, lineItems);
+
           }
         );
       })
