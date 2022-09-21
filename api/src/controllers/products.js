@@ -1,22 +1,35 @@
-const { Product, Categorie } = require("../db");
+const { Product, Categorie, Ofert } = require("../db");
 const axios = require("axios");
 const { URL_API } = require("./globalConst");
 // const { uploadCategoryDb } = require("../controllers/uploadCategoryDb")
 const { QueryTypes } = require('sequelize');
+const db = require("../db");
 
 /* GET ALL PRODUCTS FROM DB */
 const getAllProducts = async (req, res, next) => {
   try {
-    const dbInfo = await Product.findAll({
+    let dbInfo = await Product.findAll({
       where: { status: true},
-      include: {
+      include: [{
         model: Categorie,
         attributes: ["name"],
         through: { attributes: [] },
       },
+      {
+        model: Ofert,
+        attributes: ["discountPercent"],
+        through: { attributes: [] },
+      },
+        ]
     });
-    res.send(dbInfo);
-  } catch (error) {
+
+    dbInfo = dbInfo.map (e=> e = {
+      ...e.dataValues,
+      discountPrice: e.dataValues.price - (e.dataValues.price * e.dataValues.oferts[0]?.discountPercent / 100) 
+    })
+    res.status(200).json(dbInfo);
+  }
+  catch (error) {
     console.log(error);
   }
 };
