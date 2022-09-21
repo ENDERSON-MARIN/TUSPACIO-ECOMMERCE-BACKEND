@@ -151,12 +151,14 @@ const updateOrder = async (customer, data, lineItems) => {
       }
     );
 
+
     const user = {
       name:updatedOrder.shipping.name,
       email:updatedOrder.shipping.email,
     };
     //envío de email al usuario al realizar la compra
      emailer.sendMail();
+
 
   } catch (error) {
     console.log(error);
