@@ -142,7 +142,7 @@ const updateProduct = async (req, res, next) => {
 
 /* DISABLED ONE PRODUCT IN THE DATABASE */
 const disableProduct = async (req, res, next) => {
-  const { status } = req.query
+  const { status } = req.body
   try {
     const { id } = req.params;
 
