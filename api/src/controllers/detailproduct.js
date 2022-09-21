@@ -32,10 +32,8 @@ const getDetailProduct = async (req, res, next) => {
                 score: e.score,
                 user_id: e.user_id,   
             }))
-            
-            /* SUMAR LOS VALORES DEL ARRAY DE OFERTAS */
-            const sumOferts = dbInfo.oferts.reduce((acc, e) => acc + e.discountPercent, 0)  
-             dbInfo = {...dbInfo.dataValues, priceOfert: Number(dbInfo.price) - (Number(dbInfo.price) * sumOferts / 100)}
+        
+            dbInfo = {...dbInfo.dataValues, priceOfert: Number(dbInfo.price) - (Number(dbInfo.price) * dbInfo.oferts[0]?.discountPercent / 100)}
          
             res.send({dbInfo, reviews});
            } catch (error) {
