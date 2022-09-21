@@ -34,12 +34,12 @@ const getLogin = async (req, res, next) => {
                 status,
                 rol_id: roleid
             })
-            sendEmailUsers.sendMail(user)
+            sendEmailUsers.sendMail()
             res.send(user);
         }
         //  SI EL USUARIO EXISTE LO RETORNA 
         else {
-            sendEmailUsers.sendMail(user)
+            sendEmailUsers.sendMail()
             res.send(user);
         }
     } catch (error) {
