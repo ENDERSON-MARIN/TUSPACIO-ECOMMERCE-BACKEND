@@ -26,6 +26,8 @@ const reviewsRoute = require('./reviews.js')
 const rolesRoute = require("./roles.js");
 const userRoute = require("./updateUserRole.js");
 
+const sendEmail = require("./testSendEmail");
+
 const router = Router();
 
 /*_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
@@ -80,5 +82,11 @@ router.use("/rol", rolesRoute);
                 RUTA DE PAGO (Checkout)
 _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/*/
 router.use("/checkout", checkoutRoute);
+
+/*_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_ /_/_/_/_/_/_/_/_/_/_/_/_/_/_/_ /_/_/_/_/_/_/_/_/_/_/_/_/_/_/_ 
+RUTAS DE EMAIL                                                                  
+_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/*/
+router.use("/send-email", sendEmail);
+
 
 module.exports = router;
