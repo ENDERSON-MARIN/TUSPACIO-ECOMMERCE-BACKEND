@@ -31,13 +31,13 @@ const createTrans = () => {
   return transport;
 };
 
-const sendMail = async (user) => {
+const sendMail = async () => {
   const transporter = createTrans();
   const info = await transporter.sendMail({
     from: '"Tu spacio, los expertos en belleza! 🛒🎁" <tuspaciopg@gmail.com>',
-    to: `${user.email}`,
-    subject: `Hola ${user.name}, Tu compra ha sido realizada exitosamente!`,
-    html: "<b>PF tu espacio Henry</b>",
+    to: ['marinenderson1@gmail.com', 'tuspaciopg@gmail.com'],
+    subject: "Hola, Tu compra ha sido realizada exitosamente!",
+    html: "<b>PF tu espacio Henry Ecommerce</b>",
   });
 
   console.log("Message sent: %s", info.messageId);
@@ -45,4 +45,4 @@ const sendMail = async (user) => {
   return;
 };
 
-exports.sendMail = (user) => sendMail(user);
+exports.sendMail = () => sendMail();

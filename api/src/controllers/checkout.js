@@ -1,6 +1,6 @@
 const { updateOrder } = require("./orders");
 
-const { sendMail } = require("../helpers/sendMail");
+const sendEmailUsers = require('../helpers/sendEmailUsers')
 //Checkout
 const stripe = require("stripe")(
   "sk_test_51Les4YKH7XmQskrVxo1Th9dZWzcjEynmqRUGSXByXhtBh7JbT3Zhvg4JATIIJAKP0XxhPkT1dLO9UdHDhoEiQKm100gdCLwxqr"
@@ -140,7 +140,7 @@ const webhook = (req, res) => {
           {},
           function (err, lineItems) {
             updateOrder(customer, data, lineItems);
-            
+            sendEmailUsers.sendMail()
           }
         );
       })

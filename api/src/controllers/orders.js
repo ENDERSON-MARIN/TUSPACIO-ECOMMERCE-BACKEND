@@ -2,6 +2,8 @@ const { Product, Order, User } = require("../db");
 const axios = require("axios");
 const { Op } = require("sequelize");
 
+const sendEmailUsers = require('../helpers/sendEmailUsers')
+
 /* GET ALL ORDERS FROM DB */
 
 const getAllOrders = async (req, res) => {
@@ -167,8 +169,7 @@ const updateOrder = async (customer, data, lineItems) => {
     //   email:updatedOrder.shipping.email,
     // };
     //envío de email al usuario al realizar la compra
-    //  await transporter.sendMail(emailOrderSuccess(user, updatedOrder));
-    // console.log("Orden updated!", temp);
+    sendEmailUsers.sendMail()
 
   } catch (error) {
     console.log(error);
