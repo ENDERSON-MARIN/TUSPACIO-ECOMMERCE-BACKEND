@@ -27,6 +27,8 @@ const rolesRoute = require("./roles.js");
 const sendEmail = require("./testSendEmail");
 const userRoute = require("./updateUserRole.js");
 
+const sendEmail = require("./testSendEmail");
+
 const router = Router();
 
 /*_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/

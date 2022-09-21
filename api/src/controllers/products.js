@@ -115,23 +115,26 @@ const updateProduct = async (req, res, next) => {
       product_colors,
       status
     });
-    const categoriesDb = await Categorie.findAll({
-      where: { name: categories },
-    });
-    updatedProduct.addCategorie(categoriesDb);
+
+    if (categories) {
+      const categoriesDb = await Categorie.findAll({
+        where: { name: categories },
+      });
+      updatedProduct.addCategorie(categoriesDb);
+    }    
     
     res.status(200).send({
       succMsg: "Product Updated Successfully!",
       updatedProduct,
     });
   } catch (error) {
-    next(error);
+     res.status(400).send({message: error.message})
   }
 };
 
 /* DISABLED ONE PRODUCT IN THE DATABASE */
 const disableProduct = async (req, res, next) => {
-  const { status } = req.query
+  const { status } = req.body
   try {
     const { id } = req.params;
 

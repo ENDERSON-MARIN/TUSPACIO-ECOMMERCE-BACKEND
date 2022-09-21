@@ -1,8 +1,7 @@
 const { Product, Order, User } = require("../db");
 const axios = require("axios");
 const { Op } = require("sequelize");
-
-const { sendMail } = require("../helpers/sendMail");
+const emailer = require('../helpers/allEmails')
 
 /* GET ALL ORDERS FROM DB */
 
@@ -59,13 +58,20 @@ const getOrdersByUserId = async (req, res, next) =>
   const { id } = req.params;
   try {
     const dbInfo = await Order.findAll({
-      attributes: ["number", "userId", "orderProducts", "total", "updatedAt","status"],
-      where: { 
-        userId: id ,
-        number: {
-          [Op.ne]: null
-      }
-    },
+      attributes: [
+        "number",
+        "userId",
+        "orderProducts",
+        "total",
+        "updatedAt",
+        "status",
+      ],
+      where: {
+        userId: id,
+        //   number: {
+        //     [Op.ne]: null
+        // }
+      },
     });
     res.send(dbInfo);
   } catch (error) {
@@ -120,6 +126,7 @@ const createOrder = async (req, res) => {
       userId: req.body.user,
       orderProducts: req.body.cart,
     });
+    emailer.sendMail();
     res.status(200).json({
       msg: "Temporary Order Created",
       newOrder,
@@ -131,7 +138,7 @@ const createOrder = async (req, res) => {
 //
 // UPDATE ONE ORDER IN THE DATABASE FROM STRIPE //
 const updateOrder = async (customer, data, lineItems) => {
-  console.log(customer, data, lineItems);
+  
   try {
     let temp = await Order.findOne({
       order: [["createdAt", "DESC"]],
@@ -150,8 +157,13 @@ const updateOrder = async (customer, data, lineItems) => {
         },
       }
     );
-    sendMail(name="Enderson Marín", email="marinenderson1@gmail.com")
-    console.log("Successfully updated!");
+    const user = {
+      name:updatedOrder.shipping.name,
+      email:updatedOrder.shipping.email,
+    };
+    //envío de email al usuario al realizar la compra
+     emailer.sendMail();
+     
   } catch (error) {
     console.log(error);
   }
