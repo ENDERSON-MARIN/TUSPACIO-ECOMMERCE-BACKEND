@@ -99,10 +99,7 @@ const Checkout = async (req, res) => {
     success_url: `${CLIENT}/checkout/success`,
     cancel_url: `${CLIENT}/cart`,
   });
-  res.send(
-    sendMail((name = "Enderson Marín"), (email = "marinenderson1@gmail.com")),
-    { url: session.url }
-  );
+  res.send({ url: session.url });
 };
 //
 
@@ -143,10 +140,7 @@ const webhook = (req, res) => {
           {},
           function (err, lineItems) {
             updateOrder(customer, data, lineItems);
-            sendMail(
-              (name = "Enderson Marín"),
-              (email = "marinenderson1@gmail.com")
-            );
+            
           }
         );
       })
