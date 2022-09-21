@@ -9,7 +9,6 @@ https://github.com/evanshortiss/express-joi-validation#readme
 
 /* SE CREAN LOS OBJETOS CON LOS TIPOS DE VALIDACIONES */
 
-
 const paramsSchema = Joi.object({
   id: Joi.string().regex(/^([a-zA-Z0-9-]+)$/),
 });

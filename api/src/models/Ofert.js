@@ -48,18 +48,18 @@ module.exports = (sequelize) => {
           validate: {
             notNull: { msg: "The discount percent field cannot be null " },
             notEmpty: true,
-        }
         },
         products_id: {
           type: DataTypes.INTEGER,
           allowNull: false,
-          // references: {
-          //   model: Product,
-          //   key: "id",
-          // },
+          references: {
+            model: Product,
+            key: "id",
+          },
         },
         
       }
+    }
   );
 };
         

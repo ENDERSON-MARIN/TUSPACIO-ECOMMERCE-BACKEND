@@ -25,16 +25,16 @@ const server = express();
 server.name = 'API';
 
 const whiteList = [
-  'http://localhost:3000', 
-  'http://localhost:3001', 
-  'https://pg-tuspacio.up.railway.app/',
-  'https://pg-tuspacio.up.railway.app/',
-  'https://tuspacio.vercel.app',
-  'https://tuspacio.vercel.app/cart',
-  'https://tuspacio.vercel.app/*',
-  'https://pg-tuspacio.up.railway.app/api',
-  'https://pg-tuspacio.up.railway.app/api/*',
-  'https://pg-tuspacio.up.railway.app/api/checkout',
+'http://localhost:3000', 
+'http://localhost:3001', 
+'https://pg-tuspacio.up.railway.app/',
+'https://pg-tuspacio.up.railway.app/',
+'https://tuspacio.vercel.app',
+'https://tuspacio.vercel.app/cart',
+'https://tuspacio.vercel.app/*',
+'https://pg-tuspacio.up.railway.app/api',
+'https://pg-tuspacio.up.railway.app/api/*',
+'https://pg-tuspacio.up.railway.app/api/checkout',
   
 ]
 
