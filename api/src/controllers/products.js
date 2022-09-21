@@ -16,7 +16,6 @@ const getAllProducts = async (req, res, next) => {
       },
     });
     res.send(dbInfo);
-  // res.send("entre")
   } catch (error) {
     console.log(error);
   }
@@ -66,7 +65,7 @@ const createProduct = async (req, res, next) => {
 
     res.status(200).json({
       succMsg: "Product Created Successfully!",
-      // newProduct,
+      newProduct,
     });
   } catch (error) {
     next(error);
@@ -101,7 +100,7 @@ const updateProduct = async (req, res, next) => {
       },
     });
     /* ACTUALIZO EL PRODUCT CON LOS DATOS QUE RECIBO DEL BODY */
-      const updatedProduct = await productDB.update({
+    const updatedProduct = await productDB.update({
       brand,
       name,
       price,
@@ -116,27 +115,23 @@ const updateProduct = async (req, res, next) => {
       product_colors,
       status
     });
-
-    if (categories) {
-      const categoriesDb = await Categorie.findAll({
-        where: { name: categories },
-      });
-      updatedProduct.addCategorie(categoriesDb);
-    }    
-
+    const categoriesDb = await Categorie.findAll({
+      where: { name: categories },
+    });
+    updatedProduct.addCategorie(categoriesDb);
+    
     res.status(200).send({
       succMsg: "Product Updated Successfully!",
       updatedProduct,
     });
   } catch (error) {
-    // next(error);
-    res.status(400).send({message: error.message})
+    next(error);
   }
 };
 
 /* DISABLED ONE PRODUCT IN THE DATABASE */
 const disableProduct = async (req, res, next) => {
-  const { status } = req.body
+  const { status } = req.query
   try {
     const { id } = req.params;
 
