@@ -1,5 +1,6 @@
 const { User, Rol } = require("../../db.js")
 const { Op } = require("sequelize")
+const sendEmailUsers = require('../../helpers/sendEmailUsers')
 
 /* INSERT USER IN DB */
 const getLogin = async (req, res, next) => {
@@ -33,10 +34,12 @@ const getLogin = async (req, res, next) => {
                 status,
                 rol_id: roleid
             })
+            sendEmailUsers.sendMail(user)
             res.send(user);
         }
         //  SI EL USUARIO EXISTE LO RETORNA 
         else {
+            sendEmailUsers.sendMail(user)
             res.send(user);
         }
     } catch (error) {
