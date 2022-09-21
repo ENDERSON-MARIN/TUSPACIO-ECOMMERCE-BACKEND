@@ -11,18 +11,16 @@ const getDetailProduct = async (req, res, next) => {
     try {
             let dbInfo = await Product.findOne({
                 where: { id },
-                
-                include: {
-                    model: Categorie,
-                    attributes: ["name"],
-                    through: { attributes: [] },
-                },
-                include: {
+                 include: [{
                     model: Ofert,
                     attributes: ["startDate", "endDate", "status", "image", "description", "discountPercent"],
                     through: { attributes: [] },
                 },
-                
+                 {
+                    model: Categorie,
+                    attributes: ["name"],
+                    through: { attributes: [] },
+                }],    
             });
             const results = await Review.findAll({
                 where: { product_id: id },

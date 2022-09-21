@@ -115,11 +115,12 @@ const updateProduct = async (req, res, next) => {
       product_colors,
       status
     });
-    const categoriesDb = await Categorie.findAll({
-      where: { name: categories },
-    });
-    updatedProduct.addCategorie(categoriesDb);
-    
+    if (categories) {
+      const categoriesDb = await Categorie.findAll({
+        where: { name: categories },
+      });
+      updatedProduct.addCategorie(categoriesDb);
+    }    
     res.status(200).send({
       succMsg: "Product Updated Successfully!",
       updatedProduct,

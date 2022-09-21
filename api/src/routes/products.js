@@ -33,6 +33,7 @@ const bodySchema = Joi.object({
   tag_list: Joi.array().items(Joi.string().regex(/^[a-zA-Z\s]+$/)),
   stock: Joi.number().min(0),
   status: Joi.boolean(),
+  
   // stock: Joi.number().min(1).required(),
   // category_id: Joi.string().min(1).max(50).required(),
 });
