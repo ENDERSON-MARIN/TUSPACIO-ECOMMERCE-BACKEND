@@ -39,11 +39,6 @@ const getDetailProduct = async (req, res, next) =>
            } catch (error) {
              console.log(error);
          }
-     };
-        
-    } catch (error) {
-        console.log(error);
-    }
 };
 
 module.exports = { getDetailProduct };
