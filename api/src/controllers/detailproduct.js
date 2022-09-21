@@ -9,7 +9,7 @@ const getDetailProduct = async (req, res, next) =>
     const id = req.params.id;
 
     try {
-        const dbInfo = await Product.findOne({
+        let dbInfo = await Product.findOne({
             where: { id },
             include: [{
                 model: Ofert,
