@@ -24,9 +24,8 @@ const usersRoute = require("./users");
 const checkoutRoute = require("./checkout.js");
 const reviewsRoute = require('./reviews.js')    
 const rolesRoute = require("./roles.js");
-const userRoute = require("./updateUserRole.js");
-
 const sendEmail = require("./testSendEmail");
+const userRoute = require("./updateUserRole.js");
 
 const router = Router();
 
@@ -87,6 +86,5 @@ router.use("/checkout", checkoutRoute);
 RUTAS DE EMAIL                                                                  
 _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/*/
 router.use("/send-email", sendEmail);
-
 
 module.exports = router;
