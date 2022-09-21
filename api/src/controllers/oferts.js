@@ -23,14 +23,14 @@ const getDbOferts = async (req, res) => {
 const createOfert = async (req, res, next) => {
   try {
     /* ME TRAIGO TODOS LOS VALORES DEL CUERPO DE LA PETICION */
+    const {products_id} = req.params;
     const {
         startDate,
         endDate,
         status,
         image,
         description,
-        discountPercent,
-        products_id,
+        discountPercent
     } = req.body;
     /* CREATE NEW PRODUCT */
     const newOfert = await Ofert.create({
@@ -40,11 +40,11 @@ const createOfert = async (req, res, next) => {
         image,
         description,
         discountPercent,
-        products_id, // ESTO ES UN ARRAY DE ID DE PRODUCTOS
+        products_id, 
     });
 
     const products = await Product.findAll({
-      where: { id: products_id }, // ESTO ES UN ARRAY DE ID DE PRODUCTOS
+      where: { id: products_id }, 
     });
     newOfert.addProduct(products);
 

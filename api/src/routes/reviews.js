@@ -47,7 +47,7 @@ router.get("/reviewId/:id", validator.params(paramsSchema), getOneReview);
 router.get("/userId/:user_id", getAllUserReviews)
 
 /* CREATE NEW ORDER IN THE DATABASE */
-router.post("/", validator.body(bodySchema), createReview);
+router.post("/", createReview);
 
 
 module.exports = router;

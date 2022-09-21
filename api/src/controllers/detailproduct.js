@@ -13,7 +13,7 @@ const getDetailProduct = async (req, res, next) =>
                 where: { id },
                  include: [{
                     model: Ofert,
-                    attributes: ["startDate", "endDate", "status", "image", "description", "discountPercent"],
+                    attributes: ["discountPercent"],
                     through: { attributes: [] },
                 },
                  {
@@ -40,11 +40,6 @@ const getDetailProduct = async (req, res, next) =>
              console.log(error);
          }
      };
-        
-    } catch (error) {
-        console.log(error);
-    }
-};
 
 module.exports = { getDetailProduct };
 
