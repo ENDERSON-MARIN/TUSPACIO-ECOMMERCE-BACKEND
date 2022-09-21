@@ -13,7 +13,6 @@ const getAllOrders = async (req, res) => {
         attributes: ["id", "name", "price" ],
            through: { attributes: [] },
       },*/
-      attributes: ["id", "number","createdAt"],
       where: {
         number: {
           [Op.ne]: null,
