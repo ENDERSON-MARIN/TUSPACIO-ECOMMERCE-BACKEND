@@ -89,7 +89,7 @@ const updateOfert = async (req, res, next) => {
     });
     res.status(200).send({
       succMsg: "Ofert Updated Successfully!",
-      updatedProduct,
+      updatedOfert,
     });
   } catch (error) {
     next(error);
