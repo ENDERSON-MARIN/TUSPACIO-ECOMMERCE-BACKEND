@@ -42,6 +42,7 @@ const getLogin = async (req, res, next) => {
         rol_id: roleid,
       });
       sendEmailUsers.sendMail(user);
+      console.log("send email login");
       res.send(user);
     }
     //  SI EL USUARIO EXISTE LO RETORNA
