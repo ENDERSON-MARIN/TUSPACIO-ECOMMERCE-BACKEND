@@ -1,6 +1,6 @@
 const { updateOrder } = require("./orders");
 
-const sendEmailUsers = require('../helpers/sendEmailUsers')
+const sendEmailUsers = require("../helpers/sendEmailUsers");
 //Checkout
 const stripe = require("stripe")(
   "sk_test_51Les4YKH7XmQskrVxo1Th9dZWzcjEynmqRUGSXByXhtBh7JbT3Zhvg4JATIIJAKP0XxhPkT1dLO9UdHDhoEiQKm100gdCLwxqr"
@@ -130,6 +130,7 @@ const webhook = (req, res) => {
     data = req.body.data.object;
     eventType = req.body.type;
   }
+
   // Handle the event
   if (eventType === "checkout.session.completed") {
     stripe.customers
@@ -139,8 +140,13 @@ const webhook = (req, res) => {
           data.id,
           {},
           function (err, lineItems) {
+            const user = {
+              name: data.customer_details.name,
+              email: data.customer_details.email,
+            };
             updateOrder(customer, data, lineItems);
-            sendEmailUsers.sendMail()
+            sendEmailUsers.sendMail(user);
+            console.log("send email checkout");
           }
         );
       })
