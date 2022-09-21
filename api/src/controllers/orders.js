@@ -126,7 +126,6 @@ const createOrder = async (req, res) => {
       userId: req.body.user,
       orderProducts: req.body.cart,
     });
-    emailer.sendMail();
     res.status(200).json({
       msg: "Temporary Order Created",
       newOrder,
