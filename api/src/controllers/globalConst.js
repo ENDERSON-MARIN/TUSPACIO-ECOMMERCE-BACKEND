@@ -2,7 +2,7 @@
  * UTILIZADO PARA UTILIZAR LAS URLS COMO VARIABLES GENERICAS
  */
 
-    const URL_API = "https://tuspacio.herokuapp.com/api"
+    const URL_API = "https://pg-tuspacio.up.railway.app/api"
     
 
 module.exports = {

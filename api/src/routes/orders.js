@@ -41,7 +41,7 @@ const router = Router();
 router.get("/", getAllOrders);
 
 /* GET LIMIT ORDERS FROM THE BOARD DATABASE */
-router.get("/dashbord", getLimitOrders);
+router.get("/dashboard", getLimitOrders);
 
 /* GET ONE ORDER FRONT THE DATABASE */
 router.get("/:id", validator.params(paramsSchema), getOneOrder);
@@ -50,7 +50,7 @@ router.get("/:id", validator.params(paramsSchema), getOneOrder);
 router.get("/status/:status", getOrdersByStatus);
 
 /* GET ALL ORDERS BY USER ID FRONT THE DATABASE */
-router.get("/user/:user_id", getOrdersByUserId);
+router.get("/user/:id", getOrdersByUserId);
 
 /* CREATE NEW ORDER IN THE DATABASE */
 router.post("/", createOrder);

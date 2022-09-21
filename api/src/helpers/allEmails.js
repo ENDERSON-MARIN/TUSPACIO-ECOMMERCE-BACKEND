@@ -3,7 +3,7 @@ const nodemailer = require("nodemailer");
 const sendEmail = async (req, res, next) => {
   try {
 
-    const webSite = "https://tuspacio-m4dn98bp8-enderson-marin.vercel.app/";
+    const webSite = "https://tuspacio.vercel.app/";
 
     const contentHTML = `
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -2882,7 +2882,7 @@ const sendEmail = async (req, res, next) => {
 
     const info = await transport.sendMail({
       from: '"Tu spacio, los expertos en belleza! 🛒🎁" <tuspaciopg@gmail.com>',
-      to: ["tuspacio@test.com", "tuspacio@bellleza.com"],
+      to: ["tuspaciopg@gmail.com", "marinenderson1@gmail.com"],
       subject: "Order Successfully Made! ✔",
       html: contentHTML,
     });

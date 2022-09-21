@@ -8,17 +8,12 @@ https://github.com/evanshortiss/express-joi-validation#readme
 */
 
 /* SE CREAN LOS OBJETOS CON LOS TIPOS DE VALIDACIONES */
-const querySchema = Joi.object({
-  name: Joi.string().regex(/^[a-zA-Z\s]+$/),
-});
+
 
 const paramsSchema = Joi.object({
   id: Joi.string().regex(/^([a-zA-Z0-9-]+)$/),
 });
 
-const bodySchema = Joi.object({
-  name: Joi.string().min(3).max(100).required(),
-});
 
 const {
   getAllCategories,
@@ -33,7 +28,7 @@ const router = Router();
 router.get("/", getAllCategories);
 
 /* CREATE NEW CATEGORY IN THE DATABASE */
-router.post("/", validator.body(bodySchema), createCategory);
+router.post("/", createCategory);
 
 /* UPDATE CATEGORY IN THE DATABASE */
 router.put("/:id", validator.params(paramsSchema), updateCategory);

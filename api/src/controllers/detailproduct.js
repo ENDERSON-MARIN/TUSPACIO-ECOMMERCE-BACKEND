@@ -30,10 +30,9 @@ const getDetailProduct = async (req, res, next) => {
                 title: e.title,
                 text: e.text,
                 score: e.score,
-                user_id: e.user_id,
-                
+                user_id: e.user_id,   
             }))
-
+            
             /* SUMAR LOS VALORES DEL ARRAY DE OFERTAS */
             const sumOferts = dbInfo.oferts.reduce((acc, e) => acc + e.discountPercent, 0)  
              dbInfo = {...dbInfo.dataValues, priceOfert: Number(dbInfo.price) - (Number(dbInfo.price) * sumOferts / 100)}
