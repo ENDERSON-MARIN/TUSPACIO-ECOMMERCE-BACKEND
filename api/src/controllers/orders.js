@@ -1,7 +1,7 @@
 const { Product, Order, User } = require("../db");
 const axios = require("axios");
 const { Op } = require("sequelize");
-const { transporter, emailOrderSuccess} = require('../helpers/allEmails');
+const emailer = require('../helpers/allEmails')
 
 
 /* GET ALL ORDERS FROM DB */
@@ -155,9 +155,8 @@ const updateOrder = async (customer, data, lineItems) => {
       email:updatedOrder.shipping.email,
     };
     //envío de email al usuario al realizar la compra
-     await transporter.sendMail(emailOrderSuccess(user, updatedOrder));
+     emailer.sendMail();
 
-     return res.redirect('https://tuspacio.vercel.app/checkout/success')
   } catch (error) {
     console.log(error);
   }
