@@ -27,16 +27,16 @@ var transporter = nodemailer.createTransport({
   },
 });
 
-const emailOrderSuccess = function () {
+const emailOrderSuccess = function (user, order) {
   return {
     from: '"Tu spacio, los expertos en belleza! 🛒🎁" <tuspaciopg@gmail.com>',
-    to: "marinenderson1@gmail.com",
+    to: `${user.email}`,
     subject: "Compra realizada correctamente",
     attachDataUrls: true,
     html: `
     <div style="background-color: #2b9423; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3px 10px; font-weight: bold; border-radius: 5px;">
     <ul>
-    <h1 style="color: #fff;">Hola , gracias por elegirnos!</h1>
+    <h1 style="color: #fff;">Hola ${user.email}, gracias por elegirnos!</h1>
     </ul>
     </div>
     <h2 style="color: #000000">Tu compra se procesó correctamente, a continuación te dejamos los detalles de la misma: </h2>
