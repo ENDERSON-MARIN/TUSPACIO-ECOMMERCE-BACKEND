@@ -194,7 +194,7 @@ const disableProduct = async (req, res, next) => {
 
     res.status(200).json({
       ok: true,
-      disabledProduct,
+      // disabledProduct,
     });
   } catch (error) {
     next(error);
