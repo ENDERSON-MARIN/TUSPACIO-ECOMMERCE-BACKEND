@@ -150,7 +150,7 @@ const disableProduct = async (req, res, next) => {
   const { status } = req.body
   // try {
     const { id } = req.params;
-   
+   console.log(status)
     if(status === 'on') {
     await Product.update(
       { status: true },
