@@ -134,8 +134,6 @@ const updateProduct = async (req, res, next) => {
         where: { name: categories },
       });
       /* BORRO LAS CATEGORIAS DEL PRODUCTO */
-
-
       const oldCategories = await Categorie.findAll({ 
         include: [{
           model: Product,
@@ -144,7 +142,6 @@ const updateProduct = async (req, res, next) => {
         }]
       })
       await productDB.removeCategorie(oldCategories);
-      console.log(productDB.categories);
       updatedProduct.addCategorie(categoriesDb);
     }    
     
