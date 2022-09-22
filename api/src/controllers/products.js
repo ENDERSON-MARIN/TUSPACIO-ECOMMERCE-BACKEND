@@ -200,7 +200,7 @@ const getDashboard = async (req, res) => {
 
   try {
     const data = await Product.findAll({
-      attributes: ["id", "name", "stock", "description", "price"]
+      attributes: ["id", "name", "stock", "description", "price","status"]
     })
     res.send(data)
   } catch (error) {
