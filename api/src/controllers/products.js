@@ -148,10 +148,10 @@ const updateProduct = async (req, res, next) => {
 /* DISABLED ONE PRODUCT IN THE DATABASE */
 const disableProduct = async (req, res, next) => {
   const { status } = req.body
-  try {
+  // try {
     const { id } = req.params;
-
-    if( status === 'on') {
+   
+    if(status === 'on') {
     await Product.update(
       { status: true },
       {
@@ -160,9 +160,11 @@ const disableProduct = async (req, res, next) => {
         },
       }
     )
-  }
+    res.status(200).json({
+      ok: true,
+    });
 
-  if( status === 'off') {
+  } else if( status === 'off') {
     await Product.update(
       { status: false },
       {
@@ -171,34 +173,18 @@ const disableProduct = async (req, res, next) => {
         },
       }
     )
-  }
-
-    const disabledProduct = await Product.findByPk(id, {
-      attributes: [
-        "id",
-        "brand",
-        "name",
-        "price",
-        "price_sign",
-        "currency",
-        "image_link",
-        "description",
-        "rating",
-        "product_type",
-        "stock",
-        "tag_list",
-        "product_colors",
-        "status",
-      ],
-    });
-
     res.status(200).json({
       ok: true,
-      // disabledProduct,
     });
-  } catch (error) {
-    next(error);
+  } else {
+    res.status(404).send({message: "valor undefined"});
   }
+
+
+    
+
+
+
 };
 
 const getDashboard = async (req, res) => {
