@@ -33,7 +33,6 @@ router.post("/", createProduct);
 router.put("/:id", updateProduct);
 
 /* DISABLED PRODUCT IN THE DATABASE */
-router.delete("/:id", validator.params(paramsSchema), disableProduct);
-
+router.delete("/:id", disableProduct);
 
 module.exports = router;
