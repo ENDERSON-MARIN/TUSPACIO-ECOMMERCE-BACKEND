@@ -12,7 +12,7 @@ module.exports = (sequelize) => {
             notNull: { msg: "The discount percent field cannot be null " },
             notEmpty: true,
         },
-        products_id: {
+        product_id: {
           type: DataTypes.INTEGER,
           allowNull: false,
           references: {

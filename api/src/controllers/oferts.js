@@ -6,13 +6,7 @@ const { URL_API } = require("./globalConst");
 
 const getDbOferts = async (req, res) => {
   try {
-    const dbInfo = await Ofert.findAll({
-      include: {
-        model: Product,
-        attributes: ["name", "id"],
-        through: { attributes: [] },
-      },
-    });
+    const dbInfo = await Ofert.findAll();
     res.send(dbInfo); 
   } catch (error) {
     console.log(error);
@@ -23,30 +17,24 @@ const getDbOferts = async (req, res) => {
 const createOfert = async (req, res, next) => {
   try {
     /* ME TRAIGO TODOS LOS VALORES DEL CUERPO DE LA PETICION */
-    const {products_id} = req.params;
+    const {Product_id} = req.params;
     const {
-        startDate,
-        endDate,
-        status,
-        image,
-        description,
-        discountPercent
+             discountPercent
     } = req.body;
-    /* CREATE NEW PRODUCT */
+    /* DESTROY OFERT OF THE PRODUCT */
+    const ofertsId = await Ofert.findAll({
+      where: { Product_id },
+    });
+    if (ofertsId.length > 0) {
+      await Ofert.destroy({
+        where: { Product_id },
+      });
+    }
+    /* CREATE NEW OFERT */
     const newOfert = await Ofert.create({
-        startDate,
-        endDate,
-        status,
-        image,
-        description,
         discountPercent,
-        products_id, 
+        Product_id, 
     });
-
-    const products = await Product.findAll({
-      where: { id: products_id }, 
-    });
-    newOfert.addProduct(products);
 
     res.status(200).json({
       succMsg: "Ofert Created Successfully!",
@@ -57,83 +45,7 @@ const createOfert = async (req, res, next) => {
   }
 };
 
-/* UPDATE ONE OFERT IN THE DATABASE */
-const updateOfert = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const {
-        startDate,
-        endDate,
-        status,
-        image,
-        description,
-        discountPercent,
-        products_id,
-    } = req.body;
-
-    /* BUSCO LA OFERTA EN LA BD POR EL ID */
-    let ofertDB = await Ofert.findOne({
-      where: {
-        id: id,
-      },
-    });
-    /* ACTUALIZO LA OFERTA CON LOS DATOS QUE RECIBO DEL BODY */
-    const updatedOfert = await ofertDB.update({
-        startDate,
-        endDate,
-        status,
-        image,
-        description,
-        discountPercent,
-        products_id,
-    });
-    res.status(200).send({
-      succMsg: "Ofert Updated Successfully!",
-      updatedOfert,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-/* DISABLE ONE OFERT IN THE DATABASE */
-const disableOfert = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    await Ofert.update(
-      { status: false },
-      {
-        where: {
-          id: id,
-        },
-      }
-    );
-
-    const disabledOfert = await Ofert.findByPk(id, {
-      attributes: [ 
-        "id",
-        "startDate",
-        "endDate",
-        "status",
-        "image",
-        "description",
-        "discountPercent",
-        "products_id",       
-      ],
-    });
-
-    res.status(200).json({
-      ok: true,
-      disabledOfert,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
 module.exports = {
     getDbOferts,
     createOfert,
-    updateOfert,
-    disableOfert,
 };

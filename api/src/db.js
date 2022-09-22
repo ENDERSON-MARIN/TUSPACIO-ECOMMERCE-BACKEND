@@ -90,9 +90,9 @@ Product.belongsToMany(Order, { through: "Order_Products" });
 Product.hasMany(Review, { foreignKey: "product_id" });
 Review.belongsTo(Product, { foreignKey: "product_id" });
 
-/*===========================RELATION PRODUCTS - OFERTS N:M==============================*/
-Product.belongsToMany(Ofert, { through: "Product_Oferts" });
-Ofert.belongsToMany(Product, { through: "Product_Oferts" });
+/*===========================RELATION PRODUCTS - OFERTS 1:N==============================*/
+Product.hasMany(Ofert, { foreignKey: "Product_id" });
+Ofert.belongsTo(Product, { foreignKey: "Product_id" });
 
 
 

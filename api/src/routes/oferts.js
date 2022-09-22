@@ -29,7 +29,7 @@ const bodySchema = Joi.object({
   // category_id: Joi.string().min(1).max(50).required(),
 });
 
-const { getDbOferts, createOfert, updateOfert, disableOfert} = require("../controllers/oferts.js");
+const { getDbOferts, createOfert} = require("../controllers/oferts.js");
 
 const router = Router();
 
@@ -40,13 +40,7 @@ router.get("/", getDbOferts);
 
 /* CREATE NEW OFERT IN THE DATABASE */
 
-router.post("/:products_id", createOfert);
-
-/* UPDATE OFERT IN THE DATABASE */
-router.put("/:id",  updateOfert);
-
-/* DISABLED OFERT IN THE DATABASE */
-router.delete("/:id", validator.params(paramsSchema), disableOfert);
+router.post("/:Product_id", createOfert);
 
 
 module.exports = router;
