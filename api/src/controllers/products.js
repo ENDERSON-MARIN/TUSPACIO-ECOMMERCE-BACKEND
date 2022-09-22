@@ -177,7 +177,7 @@ const disableProduct = async (req, res, next) => {
       ok: true,
     });
   } else {
-    res.status(404).send(status);
+    res.status(404).send({message: "value undefined"});
   }
 
 
