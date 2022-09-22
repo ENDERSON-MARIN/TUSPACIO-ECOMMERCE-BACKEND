@@ -13,7 +13,7 @@ https://github.com/evanshortiss/express-joi-validation#readme
 //   email: Joi.string().email(),
 // });
 
-const { sendEmail } = require("../helpers/sendMail");
+const { sendEmail } = require("../helpers/allEmails");
 
 const router = Router();
 

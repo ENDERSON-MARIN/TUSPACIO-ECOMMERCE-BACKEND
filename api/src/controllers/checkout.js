@@ -1,6 +1,6 @@
 const { updateOrder } = require("./orders");
 
-const { sendMail } = require("../helpers/sendMail");
+const sendEmailUsers = require("../helpers/sendEmailUsers");
 //Checkout
 const stripe = require("stripe")(
   "sk_test_51Les4YKH7XmQskrVxo1Th9dZWzcjEynmqRUGSXByXhtBh7JbT3Zhvg4JATIIJAKP0XxhPkT1dLO9UdHDhoEiQKm100gdCLwxqr"
@@ -99,10 +99,7 @@ const Checkout = async (req, res) => {
     success_url: `${CLIENT}/checkout/success`,
     cancel_url: `${CLIENT}/cart`,
   });
-  res.send(
-    sendMail((name = "Enderson Marín"), (email = "marinenderson1@gmail.com")),
-    { url: session.url }
-  );
+  res.send({ url: session.url });
 };
 //
 
@@ -133,6 +130,7 @@ const webhook = (req, res) => {
     data = req.body.data.object;
     eventType = req.body.type;
   }
+
   // Handle the event
   if (eventType === "checkout.session.completed") {
     stripe.customers
@@ -142,12 +140,13 @@ const webhook = (req, res) => {
           data.id,
           {},
           function (err, lineItems) {
-            console.log(customer, data, lineItems);
+            const user = {
+              name: data.customer_details.name,
+              email: data.customer_details.email,
+            };
             updateOrder(customer, data, lineItems);
-            sendMail(
-              (name = "Enderson Marín"),
-              (email = "marinenderson1@gmail.com")
-            );
+            sendEmailUsers.sendMail(user);
+            console.log("send email checkout");
           }
         );
       })

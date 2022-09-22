@@ -72,7 +72,7 @@ const updateOfert = async (req, res, next) => {
     } = req.body;
 
     /* BUSCO LA OFERTA EN LA BD POR EL ID */
-    let ofertDB = await ofert.findOne({
+    let ofertDB = await Ofert.findOne({
       where: {
         id: id,
       },
@@ -89,7 +89,7 @@ const updateOfert = async (req, res, next) => {
     });
     res.status(200).send({
       succMsg: "Ofert Updated Successfully!",
-      updatedProduct,
+      updatedOfert,
     });
   } catch (error) {
     next(error);
