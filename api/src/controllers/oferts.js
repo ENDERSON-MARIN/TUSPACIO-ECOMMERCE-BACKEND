@@ -23,16 +23,32 @@ const getDbOferts = async (req, res) => {
 const createOfert = async (req, res, next) => {
   try {
     /* ME TRAIGO TODOS LOS VALORES DEL CUERPO DE LA PETICION */
+    const { products_id} = req.params
     const {
         startDate,
         endDate,
         status,
         image,
         description,
-        discountPercent,
-        products_id,
+        discountPercent
     } = req.body;
-    /* CREATE NEW PRODUCT */
+    /* DESTROY OFERT OF THE PRODUCT */
+    const destroyOf = await Ofert.findAll({
+      include: {
+        model: Product,
+        where: {
+          id: products_id,
+        },
+        through: { attributes: [] },
+      },
+    });
+
+    if (destroyOf.length > 0) {
+      await destroyOf[0].destroy();
+    }
+    
+
+    /* CREATE NEW OFERT */
     const newOfert = await Ofert.create({
         startDate,
         endDate,
@@ -40,17 +56,18 @@ const createOfert = async (req, res, next) => {
         image,
         description,
         discountPercent,
-        products_id, // ESTO ES UN ARRAY DE ID DE PRODUCTOS
+        products_id, 
     });
 
     const products = await Product.findAll({
-      where: { id: products_id }, // ESTO ES UN ARRAY DE ID DE PRODUCTOS
+      where: { id: products_id }, 
     });
     newOfert.addProduct(products);
 
     res.status(200).json({
       succMsg: "Ofert Created Successfully!",
       newOfert,
+      destroyOf
     });
   } catch (error) {
     next(error);
