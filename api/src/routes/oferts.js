@@ -39,7 +39,7 @@ const router = Router();
 router.get("/", getDbOferts);
 
 /* CREATE NEW OFERT IN THE DATABASE */
-router.post("/", createOfert);
+router.post("/:products_id", createOfert);
 
 /* UPDATE OFERT IN THE DATABASE */
 router.put("/:id",  updateOfert);
