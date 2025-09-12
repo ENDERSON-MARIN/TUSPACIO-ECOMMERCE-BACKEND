@@ -33,8 +33,15 @@ const getAllCategories = async (req, res, next) => {
 const createCategory = async (req, res, next) => {
   const { name } = req.body;
 
+  if (!name) {
+    return res.status(400).json({
+      ok: false,
+      msg: "Name is required!",
+    });
+  }
+
   try {
-    const query = name.toLowerCase();
+    const query = name.trim().toLowerCase();
     const categoryModel = await Categorie.findOne({
       where: {
         name: query,
@@ -70,6 +77,7 @@ const updateCategory = async (req, res, next) => {
     const { id } = req.params;
     const { name } = req.body;
 
+  
     /* FIND CATEGORY IN THE DATABASE BY ID */
     let categoryDB = await Categorie.findOne({
       where: {
