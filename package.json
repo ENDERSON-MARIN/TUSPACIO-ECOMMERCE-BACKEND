@@ -4,41 +4,53 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon -L",
-    "test": "mocha -w ./tests/**/*.spec.js",
-    "json": "json-server --watch src/controllers/db.json --port 3004 "
+    "start": "node index.js",
+    "dev": "nodemon -L",
+    "test": "mocha --recursive ./tests/**/*.spec.js --exit",
+    "test:watch": "mocha --recursive ./tests/**/*.spec.js --watch",
+    "test:coverage": "nyc mocha --recursive ./tests/**/*.spec.js --exit",
+    "json": "json-server --watch src/controllers/db.json --port 3004",
+    "lint": "eslint src/**/*.js",
+    "lint:fix": "eslint src/**/*.js --fix"
   },
   "author": "Henry",
   "license": "ISC",
   "engines": {
-    "node": ">=12.18.3",
-    "npm": ">=6.14.6"
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
   },
   "dependencies": {
-    "axios": "^0.27.2",
-    "body-parser": "^1.19.0",
-    "concurrently": "^7.3.0",
-    "cookie-parser": "^1.4.5",
+    "axios": "^1.7.7",
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.3",
+    "concurrently": "^9.1.0",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
-    "express": "^4.18.1",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
     "express-joi-validation": "^5.0.1",
-    "express-openid-connect": "^2.8.0",
-    "joi": "^17.6.0",
-    "json-server": "^0.17.0",
+    "express-openid-connect": "^2.17.1",
+    "express-rate-limit": "^7.4.1",
+    "helmet": "^8.0.0",
+    "joi": "^17.13.3",
+    "json-server": "^1.0.0-beta.3",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.6",
-    "pg": "^8.5.1",
-    "sequelize": "^6.3.5",
-    "stripe": "^10.7.0",
-    "nodemailer": "^6.7.8"
+    "nodemailer": "^7.0.11",
+    "nodemon": "^3.1.9",
+    "nyc": "^17.1.0",
+    "pg": "^8.13.1",
+    "sequelize": "^6.37.5",
+    "stripe": "^17.3.1"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "mocha": "^8.2.1",
-    "standard": "17.0.0",
-    "supertest": "^6.0.1",
-    "supertest-session": "^4.1.0"
+    "chai": "^4.5.0",
+    "eslint": "^8.57.1",
+    "fast-check": "^3.23.1",
+    "mocha": "^10.8.2",
+    "prettier": "^3.4.2",
+    "standard": "^17.1.2",
+    "supertest": "^7.0.0",
+    "supertest-session": "^5.0.1"
   },
   "eslintConfig": {
     "extends": "./node_modules/standard/eslintrc.json"
