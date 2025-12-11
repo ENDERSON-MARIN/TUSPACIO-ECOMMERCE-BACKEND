@@ -1,64 +1,75 @@
-const { Categorie, Product } = require("../db");
-const logger = require("../utils/logger");
-const { NotFoundError, DatabaseError } = require("../middleware/errorHandler");
+const { Categorie, Product } = require('../db');
+const logger = require('../utils/logger');
+const { NotFoundError, DatabaseError } = require('../middleware/errorHandler');
 
 /* GET ALL CATEGORIES FROM DB */
 const getAllCategories = async (req, res, next) => {
-  const { brand, page = 1, limit = 10 } = req.query;
+  try {
+    const { brand, page = 1, limit = 10 } = req.query;
 
-  logger.logDatabase("findAll", "Categorie", { brand, page, limit });
+    logger.logDatabase('findAll', 'Categorie', { brand, page, limit });
 
-  let allCategories = await Categorie.findAll({
-    attributes: ["id", "name"],
-    include: {
-      model: Product,
-      attributes: ["id", "name", "brand", "status"],
-      // Uncomment to filter active products only
-      // where: {
-      //   status: true,
-      // },
-    },
-    offset: (page - 1) * limit,
-    limit: parseInt(limit),
-  });
+    let allCategories = await Categorie.findAll({
+      attributes: ['id', 'name'],
+      include: {
+        model: Product,
+        attributes: ['id', 'name', 'brand', 'status'],
+        required: false, // LEFT JOIN para incluir categorias sem produtos
+        // Uncomment to filter active products only
+        // where: {
+        //   status: true,
+        // },
+      },
+      offset: (page - 1) * limit,
+      limit: parseInt(limit),
+    });
 
-  if (brand) {
-    allCategories = allCategories.filter((category) =>
-      category.products.some((product) => product.brand === brand)
-    );
-  }
+    if (brand) {
+      allCategories = allCategories.filter(
+        category =>
+          category.products &&
+          category.products.some(product => product.brand === brand)
+      );
+    }
 
-  if (!allCategories || allCategories.length === 0) {
-    logger.info("No categories found", { brand });
-    return res.status(200).json({
-      status: "success",
+    if (!allCategories || allCategories.length === 0) {
+      logger.info('No categories found', { brand });
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          categories: [],
+          pagination: {
+            page: parseInt(page),
+            limit: parseInt(limit),
+            total: 0,
+          },
+        },
+      });
+    }
+
+    logger.info('Categories retrieved successfully', {
+      count: allCategories.length,
+      brand,
+    });
+
+    res.status(200).json({
+      status: 'success',
       data: {
-        categories: [],
+        categories: allCategories,
         pagination: {
           page: parseInt(page),
           limit: parseInt(limit),
-          total: 0,
+          total: allCategories.length,
         },
       },
     });
+  } catch (error) {
+    logger.error('Error retrieving categories', {
+      error: error.message,
+      stack: error.stack,
+    });
+    next(error);
   }
-
-  logger.info("Categories retrieved successfully", {
-    count: allCategories.length,
-    brand,
-  });
-
-  res.status(200).json({
-    status: "success",
-    data: {
-      categories: allCategories,
-      pagination: {
-        page: parseInt(page),
-        limit: parseInt(limit),
-        total: allCategories.length,
-      },
-    },
-  });
 };
 
 /* CREATE NEW CATEGORY IN THE DATABASE */
@@ -66,7 +77,7 @@ const createCategory = async (req, res, next) => {
   const { name } = req.body;
   const normalizedName = name.toLowerCase().trim();
 
-  logger.logDatabase("findOne", "Categorie", { name: normalizedName });
+  logger.logDatabase('findOne', 'Categorie', { name: normalizedName });
 
   // Check if category already exists
   const existingCategory = await Categorie.findOne({
@@ -76,35 +87,35 @@ const createCategory = async (req, res, next) => {
   });
 
   if (existingCategory) {
-    logger.warn("Attempt to create duplicate category", {
+    logger.warn('Attempt to create duplicate category', {
       name: normalizedName,
       existingId: existingCategory.id,
     });
 
     const error = new Error(`Category '${normalizedName}' already exists`);
-    error.name = "ConflictError";
+    error.name = 'ConflictError';
     error.status = 409;
     throw error;
   }
 
-  logger.logDatabase("create", "Categorie", { name: normalizedName });
+  logger.logDatabase('create', 'Categorie', { name: normalizedName });
 
   const newCategory = await Categorie.create({ name: normalizedName });
 
-  logger.info("Category created successfully", {
+  logger.info('Category created successfully', {
     id: newCategory.id,
     name: newCategory.name,
   });
 
   res.status(201).json({
-    status: "success",
+    status: 'success',
     data: {
       category: {
         id: newCategory.id,
         name: newCategory.name,
       },
     },
-    message: "Category created successfully",
+    message: 'Category created successfully',
   });
 };
 
@@ -113,13 +124,13 @@ const updateCategory = async (req, res, next) => {
   const { id } = req.params;
   const { name } = req.body;
 
-  logger.logDatabase("findByPk", "Categorie", { id });
+  logger.logDatabase('findByPk', 'Categorie', { id });
 
   // Find category by ID
   const category = await Categorie.findByPk(id);
 
   if (!category) {
-    logger.warn("Attempt to update non-existent category", { id });
+    logger.warn('Attempt to update non-existent category', { id });
     throw new NotFoundError(`Category with ID '${id}' not found`);
   }
 
@@ -134,23 +145,23 @@ const updateCategory = async (req, res, next) => {
     });
 
     if (existingCategory && existingCategory.id !== id) {
-      logger.warn("Attempt to update category with duplicate name", {
+      logger.warn('Attempt to update category with duplicate name', {
         id,
         name: normalizedName,
         conflictingId: existingCategory.id,
       });
 
       const error = new Error(`Category '${normalizedName}' already exists`);
-      error.name = "ConflictError";
+      error.name = 'ConflictError';
       error.status = 409;
       throw error;
     }
 
-    logger.logDatabase("update", "Categorie", { id, name: normalizedName });
+    logger.logDatabase('update', 'Categorie', { id, name: normalizedName });
 
     await category.update({ name: normalizedName });
 
-    logger.info("Category updated successfully", {
+    logger.info('Category updated successfully', {
       id,
       oldName: category.name,
       newName: normalizedName,
@@ -158,14 +169,14 @@ const updateCategory = async (req, res, next) => {
   }
 
   res.status(200).json({
-    status: "success",
+    status: 'success',
     data: {
       category: {
         id: category.id,
         name: category.name,
       },
     },
-    message: "Category updated successfully",
+    message: 'Category updated successfully',
   });
 };
 
@@ -173,27 +184,27 @@ const updateCategory = async (req, res, next) => {
 const deleteCategory = async (req, res, next) => {
   const { id } = req.params;
 
-  logger.logDatabase("findByPk", "Categorie", { id });
+  logger.logDatabase('findByPk', 'Categorie', { id });
 
   const category = await Categorie.findByPk(id);
 
   if (!category) {
-    logger.warn("Attempt to delete non-existent category", { id });
+    logger.warn('Attempt to delete non-existent category', { id });
     throw new NotFoundError(`Category with ID '${id}' not found`);
   }
 
-  logger.logDatabase("destroy", "Categorie", { id, name: category.name });
+  logger.logDatabase('destroy', 'Categorie', { id, name: category.name });
 
   await category.destroy();
 
-  logger.info("Category deleted successfully", {
+  logger.info('Category deleted successfully', {
     id,
     name: category.name,
   });
 
   res.status(200).json({
-    status: "success",
-    message: "Category deleted successfully",
+    status: 'success',
+    message: 'Category deleted successfully',
   });
 };
 

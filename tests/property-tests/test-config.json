@@ -1,0 +1,46 @@
+{
+  "environments": {
+    "development": {
+      "apiUrl": "http://localhost:3000/api",
+      "jsonServerUrl": "http://localhost:3004"
+    },
+    "production": {
+      "apiUrl": "https://sua-api-producao.com/api",
+      "jsonServerUrl": "http://localhost:3004"
+    }
+  },
+  "testData": {
+    "sampleProductIds": [740, 730, 729, 728, 168, 167],
+    "testUser": {
+      "name": "Usuário Teste",
+      "email": "teste@email.com",
+      "password": "123456"
+    },
+    "testProduct": {
+      "brand": "test-brand",
+      "name": "Produto Teste API",
+      "price": "25.99",
+      "price_sign": "$",
+      "currency": "USD",
+      "description": "Produto criado durante teste automatizado",
+      "category": "test",
+      "product_type": "test_product"
+    },
+    "testOrder": {
+      "user_id": 1,
+      "products": [
+        {
+          "product_id": 740,
+          "quantity": 2,
+          "price": 20.0
+        }
+      ],
+      "total": 40.0
+    }
+  },
+  "testOptions": {
+    "timeout": 5000,
+    "retries": 3,
+    "verbose": true
+  }
+}

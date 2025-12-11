@@ -234,8 +234,16 @@ User.belongsToMany(Product, { through: 'Favorite_Products' });
 Product.belongsToMany(User, { through: 'Favorite_Products' });
 
 /*===========================RELATION CATEGORY - PRODUCTS N:M==============================*/
-Categorie.belongsToMany(Product, { through: 'Category_Products' });
-Product.belongsToMany(Categorie, { through: 'Category_Products' });
+Categorie.belongsToMany(Product, {
+  through: 'Category_Products',
+  foreignKey: 'categorie_id',
+  otherKey: 'product_id',
+});
+Product.belongsToMany(Categorie, {
+  through: 'Category_Products',
+  foreignKey: 'product_id',
+  otherKey: 'categorie_id',
+});
 
 /*===========================RELATION USER - ORDER 1:N==============================*/
 User.hasMany(Order, { foreignKey: 'user_id' });
