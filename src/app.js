@@ -7,6 +7,11 @@ const rateLimit = require("express-rate-limit");
 const session = require("express-session");
 const routes = require("./routes/index.js");
 const cors = require("cors");
+const logger = require("./utils/logger");
+const {
+  globalErrorHandler,
+  handleNotFound,
+} = require("./middleware/errorHandler");
 require("dotenv").config();
 
 // Enhanced Auth0 configuration (updated to latest version)
@@ -175,8 +180,10 @@ server.use(bodyParser.json({ limit: "10mb" }));
 
 server.use(cookieParser());
 
-// Logging middleware
-server.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
+// Enhanced logging middleware
+server.use(logger.createMorganMiddleware());
+server.use(logger.createTimingMiddleware());
+server.use(logger.createMonitoringMiddleware());
 
 // Health check endpoint
 server.get("/health", (req, res) => {
@@ -192,71 +199,10 @@ server.get("/health", (req, res) => {
 // API routes
 server.use("/api", routes);
 
-// 404 handler for undefined routes
-server.use("*", (req, res) => {
-  res.status(404).json({
-    error: "Route not found",
-    message: `Cannot ${req.method} ${req.originalUrl}`,
-    timestamp: new Date().toISOString(),
-  });
-});
+// Handle unhandled routes (404)
+server.use("*", handleNotFound);
 
-// Enhanced error handling middleware
-server.use((err, req, res, next) => {
-  // Log error details
-  console.error("Error occurred:", {
-    message: err.message,
-    stack: err.stack,
-    url: req.originalUrl,
-    method: req.method,
-    ip: req.ip,
-    userAgent: req.get("User-Agent"),
-    timestamp: new Date().toISOString(),
-  });
-
-  // Handle specific error types
-  if (err.name === "ValidationError") {
-    return res.status(400).json({
-      error: "Validation Error",
-      message: err.message,
-      details: err.details || null,
-    });
-  }
-
-  if (err.name === "UnauthorizedError") {
-    return res.status(401).json({
-      error: "Unauthorized",
-      message: "Authentication required",
-    });
-  }
-
-  if (err.code === "LIMIT_FILE_SIZE") {
-    return res.status(413).json({
-      error: "File Too Large",
-      message: "File size exceeds the allowed limit",
-    });
-  }
-
-  // CORS errors
-  if (err.message && err.message.includes("CORS")) {
-    return res.status(403).json({
-      error: "CORS Error",
-      message: "Cross-origin request blocked",
-    });
-  }
-
-  // Default error response
-  const status = err.status || err.statusCode || 500;
-  const message =
-    process.env.NODE_ENV === "production"
-      ? "Internal Server Error"
-      : err.message || "Something went wrong";
-
-  res.status(status).json({
-    error: status >= 500 ? "Internal Server Error" : "Client Error",
-    message: message,
-    ...(process.env.NODE_ENV !== "production" && { stack: err.stack }),
-  });
-});
+// Global error handling middleware
+server.use(globalErrorHandler);
 
 module.exports = server;
