@@ -13,63 +13,82 @@ const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, DB_PORT, DATABASE_URL } =
 // Suporta tanto DATABASE_URL (NeonDB, Vercel) quanto variáveis individuais (Docker local)
 let sequelize;
 
+// Optimized connection pool configuration based on environment
+const getPoolConfig = () => {
+  const isProduction = process.env.NODE_ENV === "production";
+  return {
+    max: isProduction ? 10 : 5, // Maximum connections in pool
+    min: isProduction ? 2 : 0, // Minimum connections in pool
+    acquire: 60000, // Maximum time to get connection (ms)
+    idle: 30000, // Maximum idle time before releasing connection (ms)
+    evict: 10000, // Time interval for evicting stale connections (ms)
+    handleDisconnects: true, // Automatically handle disconnects
+  };
+};
+
+// SSL configuration for production environments
+const getSSLConfig = () => {
+  const isProduction = process.env.NODE_ENV === "production";
+  if (!isProduction) return false;
+
+  return {
+    require: true,
+    rejectUnauthorized: false, // For cloud providers with self-signed certificates
+    ca: process.env.DB_SSL_CA, // Optional: Custom CA certificate
+    key: process.env.DB_SSL_KEY, // Optional: Client key
+    cert: process.env.DB_SSL_CERT, // Optional: Client certificate
+  };
+};
+
+// Common Sequelize options
+const getSequelizeOptions = () => ({
+  dialect: "postgres",
+  dialectModule: pg,
+  logging: process.env.NODE_ENV === "development" ? console.log : false,
+  native: false,
+  pool: getPoolConfig(),
+  dialectOptions: {
+    ssl: getSSLConfig(),
+    connectTimeout: 60000,
+    keepAlive: true,
+    keepAliveInitialDelayMillis: 0,
+  },
+  retry: {
+    max: 3,
+    backoffBase: 1000,
+    backoffExponent: 1.5,
+  },
+  benchmark: process.env.NODE_ENV === "development",
+  define: {
+    timestamps: true,
+    underscored: true,
+    freezeTableName: true,
+  },
+});
+
 if (DATABASE_URL) {
-  // Usa DATABASE_URL se disponível (NeonDB, Vercel, etc.)
-  sequelize = new Sequelize(DATABASE_URL, {
-    dialect: "postgres",
-    dialectModule: pg,
-    logging: false,
-    native: false,
-    pool: {
-      max: 3,
-      min: 0,
-      acquire: 30000,
-      idle: 10000,
-    },
-    dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false,
-      },
-      connectTimeout: 60000,
-    },
-    retry: {
-      max: 3,
-    },
-  });
+  // Use DATABASE_URL if available (NeonDB, Vercel, etc.)
+  sequelize = new Sequelize(DATABASE_URL, getSequelizeOptions());
 } else if (process.env.NODE_ENV === "production") {
-  // Production com variáveis individuais
+  // Production with individual variables
   sequelize = new Sequelize({
     database: DB_NAME,
-    dialect: "postgres",
-    dialectModule: pg,
     host: DB_HOST,
-    port: DB_PORT,
+    port: parseInt(DB_PORT) || 5432,
     username: DB_USER,
     password: DB_PASSWORD,
-    logging: false,
-    pool: {
-      max: 3,
-      min: 1,
-      idle: 10000,
-    },
-    dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false,
-      },
-      keepAlive: true,
-    },
+    ...getSequelizeOptions(),
   });
 } else {
   // Development local (Docker)
   sequelize = new Sequelize(
-    `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME || "dogs_db"}`,
+    `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT || 5432}/${DB_NAME || "tuspacio_db"}`,
     {
-      dialect: "postgres",
-      dialectModule: pg,
-      logging: false,
-      native: false,
+      ...getSequelizeOptions(),
+      dialectOptions: {
+        ...getSequelizeOptions().dialectOptions,
+        ssl: false, // Disable SSL for local development
+      },
     }
   );
 }
@@ -101,6 +120,51 @@ let capsEntries = entries.map((entry) => [
   entry[1],
 ]);
 sequelize.models = Object.fromEntries(capsEntries);
+
+// Test database connection
+const testConnection = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log("✅ Database connection established successfully.");
+
+    // Log connection details in development
+    if (process.env.NODE_ENV === "development") {
+      const config = sequelize.config;
+      console.log(
+        `📊 Connected to: ${config.database} on ${config.host}:${config.port}`
+      );
+      console.log(
+        `🔧 Pool config: max=${config.pool.max}, min=${config.pool.min}`
+      );
+    }
+  } catch (error) {
+    console.error("❌ Unable to connect to the database:", error.message);
+
+    // In production, we might want to exit the process
+    if (process.env.NODE_ENV === "production") {
+      console.error("🚨 Database connection failed in production. Exiting...");
+      process.exit(1);
+    }
+  }
+};
+
+// Initialize connection test
+testConnection();
+
+// Graceful shutdown handling
+process.on("SIGINT", async () => {
+  console.log("🔄 Closing database connection...");
+  await sequelize.close();
+  console.log("✅ Database connection closed.");
+  process.exit(0);
+});
+
+process.on("SIGTERM", async () => {
+  console.log("🔄 Closing database connection...");
+  await sequelize.close();
+  console.log("✅ Database connection closed.");
+  process.exit(0);
+});
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
