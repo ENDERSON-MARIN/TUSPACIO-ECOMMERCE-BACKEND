@@ -1,35 +1,46 @@
-const { Product, Categorie, Ofert } = require("../db");
-const axios = require("axios");
-const { URL_API } = require("./globalConst");
+const { Product, Categorie, Ofert } = require('../db');
+const axios = require('axios');
+const { URL_API } = require('./globalConst');
 // const { uploadCategoryDb } = require("../controllers/uploadCategoryDb")
 const { QueryTypes } = require('sequelize');
-const db = require("../db");
+const db = require('../db');
+
+// Importar otimizações de performance
+const { cacheInstance } = require('../middleware/cache');
+const { catchAsync } = require('../middleware/errorHandler');
+const logger = require('../utils/logger');
 
 /* GET ALL PRODUCTS FROM DB */
 const getAllProducts = async (req, res, next) => {
   try {
     let dbInfo = await Product.findAll({
-      where: { status: true},
-      include: [{
-        model: Categorie,
-        attributes: ["name"],
-        through: { attributes: [] },
-      },
-      {
-        model: Ofert,
-        attributes: ["discountPercent"],
-        through: { attributes: [] },
-      },
-        ]
+      where: { status: true },
+      include: [
+        {
+          model: Categorie,
+          attributes: ['name'],
+          through: { attributes: [] },
+        },
+        {
+          model: Ofert,
+          attributes: ['discountPercent'],
+          through: { attributes: [] },
+        },
+      ],
     });
 
-    dbInfo = dbInfo.map (e=> e = {
-      ...e.dataValues,
-      discountPrice: e.dataValues.price - (e.dataValues.price * e.dataValues.oferts[0]?.discountPercent / 100) 
-    })
+    dbInfo = dbInfo.map(
+      e =>
+        (e = {
+          ...e.dataValues,
+          discountPrice:
+            e.dataValues.price -
+            (e.dataValues.price * e.dataValues.oferts[0]?.discountPercent) /
+              100,
+        })
+    );
     res.status(200).json(dbInfo);
-  }
-  catch (error) {
+  } catch (error) {
     console.log(error);
   }
 };
@@ -77,7 +88,7 @@ const createProduct = async (req, res, next) => {
     newProduct.addCategorie(categoriesDb);
 
     res.status(200).json({
-      succMsg: "Product Created Successfully!",
+      succMsg: 'Product Created Successfully!',
       newProduct,
     });
   } catch (error) {
@@ -107,7 +118,7 @@ const updateProduct = async (req, res, next) => {
     } = req.body;
 
     /* BUSCO EL PRODUCT DE LA BD POR EL ID */
-    let productDB = await Product.findOne({
+    const productDB = await Product.findOne({
       where: {
         id: id,
       },
@@ -126,7 +137,7 @@ const updateProduct = async (req, res, next) => {
       stock,
       tag_list,
       product_colors,
-      status
+      status,
     });
 
     if (categories) {
@@ -134,33 +145,35 @@ const updateProduct = async (req, res, next) => {
         where: { name: categories },
       });
       /* BORRO LAS CATEGORIAS DEL PRODUCTO */
-      const oldCategories = await Categorie.findAll({ 
-        include: [{
-          model: Product,
-          where: { id: id },
-          through: { attributes: [] },
-        }]
-      })
+      const oldCategories = await Categorie.findAll({
+        include: [
+          {
+            model: Product,
+            where: { id: id },
+            through: { attributes: [] },
+          },
+        ],
+      });
       await productDB.removeCategorie(oldCategories);
       updatedProduct.addCategorie(categoriesDb);
-    }    
-    
+    }
+
     res.status(200).send({
-      succMsg: "Product Updated Successfully!",
+      succMsg: 'Product Updated Successfully!',
       updatedProduct,
     });
   } catch (error) {
-     res.status(400).send({message: error.message})
+    res.status(400).send({ message: error.message });
   }
 };
 
 /* DISABLED ONE PRODUCT IN THE DATABASE */
 const disableProduct = async (req, res, next) => {
-  const { status } = req.query
+  const { status } = req.query;
   // try {
-    const { id } = req.params;
-   console.log(status)
-    if(status === 'on') {
+  const { id } = req.params;
+  console.log(status);
+  if (status === 'on') {
     await Product.update(
       { status: true },
       {
@@ -168,12 +181,11 @@ const disableProduct = async (req, res, next) => {
           id: id,
         },
       }
-    )
+    );
     res.status(200).json({
       ok: true,
     });
-
-  } else if( status === 'off') {
+  } else if (status === 'off') {
     await Product.update(
       { status: false },
       {
@@ -181,46 +193,41 @@ const disableProduct = async (req, res, next) => {
           id: id,
         },
       }
-    )
+    );
     res.status(200).json({
       ok: true,
     });
   } else {
-    res.status(404).send({message: "value undefined"});
+    res.status(404).send({ message: 'value undefined' });
   }
-
-
-    
-
-
-
 };
 
 const getDashboard = async (req, res) => {
-
   try {
     const data = await Product.findAll({
-      attributes: ["id", "name", "stock", "description", "price","status"],
-      order: [["status","DESC"]]
-    })
-    
-    res.send(data)
+      attributes: ['id', 'name', 'stock', 'description', 'price', 'status'],
+      order: [['status', 'DESC']],
+    });
+
+    res.send(data);
   } catch (error) {
-    res.send({ message: error.message })
+    res.send({ message: error.message });
   }
-}
+};
 
 const getProductType = async (req, res) => {
   try {
     const results = await Product.sequelize.query(
-      "select  DISTINCT product_type from products", {
-      type: QueryTypes.SELECT}
-    )
+      'select  DISTINCT product_type from products',
+      {
+        type: QueryTypes.SELECT,
+      }
+    );
     res.send(results);
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 module.exports = {
   getProductType,

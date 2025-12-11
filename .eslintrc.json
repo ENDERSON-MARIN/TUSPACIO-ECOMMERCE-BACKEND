@@ -1,10 +1,14 @@
 {
   "env": {
     "node": true,
-    "es6": true,
+    "es2022": true,
     "mocha": true
   },
-  "extends": "airbnb/base",
+  "extends": ["eslint:recommended", "prettier"],
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType": "module"
+  },
   "settings": {
     "import/resolver": {
       "node": {
@@ -13,8 +17,13 @@
     }
   },
   "rules": {
-     "no-underscore-dangle": 0,
-     "no-param-reassign": 0,
-     "import/no-unresolved": 0
-   }
+    "no-underscore-dangle": "off",
+    "no-param-reassign": "off",
+    "no-console": "warn",
+    "prefer-const": "error",
+    "no-var": "error",
+    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    "eqeqeq": ["error", "always"],
+    "curly": ["error", "all"]
+  }
 }

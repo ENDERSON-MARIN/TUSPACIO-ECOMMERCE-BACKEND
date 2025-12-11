@@ -138,7 +138,7 @@ const createOrder = async (req, res) => {
 // UPDATE ONE ORDER IN THE DATABASE FROM STRIPE //
 const updateOrder = async (customer, data, lineItems) => {
   try {
-    let temp = await Order.findOne({
+    const temp = await Order.findOne({
       order: [["createdAt", "DESC"]],
     });
     const updatedOrder = await Order.update(
@@ -172,7 +172,7 @@ const deleteOrder = async (req, res, next) => {
   try {
     const { id } = req.params;
     /* BUSCO LA ORDER EN LA BD POR EL ID */
-    let orderDB = await Order.findOne({
+    const orderDB = await Order.findOne({
       where: { id: id },
     });
     /* ELIMINO LA ORDER */

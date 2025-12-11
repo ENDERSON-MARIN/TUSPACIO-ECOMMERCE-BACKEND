@@ -13,6 +13,11 @@ module.exports = (sequelize) => {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: true, // Allow null for OAuth users
     },
     email_verified: {
       type: DataTypes.BOOLEAN,
@@ -36,7 +41,7 @@ module.exports = (sequelize) => {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: true,
-    },  
+    },
     rol_id: {
       type: DataTypes.INTEGER,
       references: {
@@ -48,4 +53,3 @@ module.exports = (sequelize) => {
 };
 
 // la tabla favorites es una tabla intermedia que relaciona user_id con products_id, se crea en db.js
-

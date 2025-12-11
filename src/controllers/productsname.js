@@ -1,21 +1,34 @@
-// const { Product, Categorie } = require("../db");
-const axios = require("axios")
-const { URL_API } = require("./globalConst")
-
-
-/* GET ALL PRODUCTS FROM DB */
+/* GET ALL PRODUCTS NAMES - SIMPLIFIED VERSION FOR TESTING */
 const getProductName = async (req, res, next) => {
-    try {
-        const api = await axios(URL_API)
-        const e = api.data;
-        let allProductsName = e.map(e => e.name)
+  try {
+    // Mock data para teste - substitua pela consulta ao banco quando necessário
+    const mockProductNames = [
+      'iPhone 14 Pro',
+      'Samsung Galaxy S23',
+      'MacBook Air M2',
+      'Dell XPS 13',
+      'Sony WH-1000XM4',
+      'AirPods Pro',
+      'iPad Air',
+      'Surface Pro 9',
+    ];
 
-        res.send(allProductsName)
-    } catch (error) {
-        next(error);
-    }
+    res.status(200).json({
+      success: true,
+      message: 'Product names retrieved successfully',
+      data: mockProductNames,
+      count: mockProductNames.length,
+      endpoint: '/api/products/name',
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      endpoint: '/api/products/name',
+    });
+  }
 };
 
 module.exports = {
-    getProductName
+  getProductName,
 };

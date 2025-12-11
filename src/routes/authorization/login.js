@@ -1,10 +1,23 @@
-const router = require('express').Router();
+const router = require("express").Router();
 
 const {
-    getLogin,
+  getLogin,
+  loginWithPassword,
+  register,
 } = require("../../controllers/authorization/login.js");
 
+const { refreshTokenHandler } = require("../../middleware/auth.js");
 
-router.post('/', getLogin); 
+// OAuth/Social login (existing endpoint)
+router.post("/", getLogin);
+
+// Traditional email/password login
+router.post("/password", loginWithPassword);
+
+// User registration
+router.post("/register", register);
+
+// Token refresh
+router.post("/refresh", refreshTokenHandler);
 
 module.exports = router;
