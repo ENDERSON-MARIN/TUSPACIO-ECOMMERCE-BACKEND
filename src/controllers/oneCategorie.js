@@ -11,7 +11,7 @@ const getOneCategorie = async (req, res, next) => {
     const dataApi = resp.data
 
    try {
-        let resultCategory = dataApi.filter(e => e.category === category)
+        const resultCategory = dataApi.filter(e => e.category === category)
 
         res.send(resultCategory);
     } catch (error) {

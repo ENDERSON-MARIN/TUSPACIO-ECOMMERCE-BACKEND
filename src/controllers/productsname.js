@@ -8,7 +8,7 @@ const getProductName = async (req, res, next) => {
     try {
         const api = await axios(URL_API)
         const e = api.data;
-        let allProductsName = e.map(e => e.name)
+        const allProductsName = e.map(e => e.name)
 
         res.send(allProductsName)
     } catch (error) {

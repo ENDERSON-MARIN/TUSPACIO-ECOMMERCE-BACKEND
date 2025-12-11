@@ -27,7 +27,7 @@ describe("Property 10: Logging and monitoring coverage", function () {
     writeFileStub = sinon
       .stub(fs, "appendFile")
       .callsFake((path, data, callback) => {
-        if (callback) callback(null);
+        if (callback) {callback(null);}
       });
 
     // Store original NODE_ENV

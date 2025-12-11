@@ -45,7 +45,7 @@ const createUser = async (req, res, next) => {
       attributes: ["id"],
       where: { rolName: "user" }
     })
-    let roleid = role_id.map(e => e.id)
+    const roleid = role_id.map(e => e.id)
     // VERIFICA SI EL USUARIO EXISTE
     let user = await User.findAll({
       where: {

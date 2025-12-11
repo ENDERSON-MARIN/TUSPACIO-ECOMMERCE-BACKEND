@@ -14,9 +14,9 @@ const getProductsBrand = async (req, res, next) => {
         if(categorie){ e = e.filter(c => 
         c.categories.find(e => e.name === categorie)?
         c = {brand: c.brand} : null)}
-        let allProducts = e?.map(e => e.brand)
-        let clearRepet = new Set(allProducts)
-        let allProductsBrand = [...clearRepet]
+        const allProducts = e?.map(e => e.brand)
+        const clearRepet = new Set(allProducts)
+        const allProductsBrand = [...clearRepet]
         res.send(allProductsBrand)
     } catch (error) {
         next(error);

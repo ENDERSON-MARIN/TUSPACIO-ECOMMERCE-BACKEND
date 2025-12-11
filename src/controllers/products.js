@@ -107,7 +107,7 @@ const updateProduct = async (req, res, next) => {
     } = req.body;
 
     /* BUSCO EL PRODUCT DE LA BD POR EL ID */
-    let productDB = await Product.findOne({
+    const productDB = await Product.findOne({
       where: {
         id: id,
       },

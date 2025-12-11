@@ -60,7 +60,7 @@ describe('Property Test: Dependency Version Compliance', function() {
 
         // Check each dependency that has a minimum requirement
         for (const [depName, minVersion] of Object.entries(minimumVersions)) {
-          if (depName === 'node') continue; // Already checked above
+          if (depName === 'node') {continue;} // Already checked above
           
           if (allDependencies[depName]) {
             const currentVersion = allDependencies[depName];

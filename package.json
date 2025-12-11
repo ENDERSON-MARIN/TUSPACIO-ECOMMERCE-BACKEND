@@ -9,9 +9,14 @@
     "test": "mocha --recursive ./tests/**/*.spec.js --exit",
     "test:watch": "mocha --recursive ./tests/**/*.spec.js --watch",
     "test:coverage": "nyc mocha --recursive ./tests/**/*.spec.js --exit",
+    "test:property": "mocha --recursive ./tests/property-tests/**/*.spec.js --exit",
     "json": "json-server --watch src/controllers/db.json --port 3004",
-    "lint": "eslint src/**/*.js",
-    "lint:fix": "eslint src/**/*.js --fix"
+    "lint": "eslint src/**/*.js tests/**/*.js",
+    "lint:fix": "eslint src/**/*.js tests/**/*.js --fix",
+    "format": "prettier --write \"src/**/*.js\" \"tests/**/*.js\" \"*.js\" \"*.json\" \"*.md\"",
+    "format:check": "prettier --check \"src/**/*.js\" \"tests/**/*.js\" \"*.js\" \"*.json\" \"*.md\"",
+    "quality": "npm run lint && npm run format:check && npm run test",
+    "prepare": "npm run quality"
   },
   "author": "Henry",
   "license": "ISC",
@@ -47,6 +52,7 @@
   "devDependencies": {
     "chai": "^4.5.0",
     "eslint": "^8.57.1",
+    "eslint-config-prettier": "^10.1.8",
     "fast-check": "^3.23.1",
     "mocha": "^10.8.2",
     "prettier": "^3.4.2",

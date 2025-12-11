@@ -246,20 +246,20 @@ describe("Property Test: Semantic Versioning Compliance", function () {
           const versions = [];
 
           if (dependencies[depName])
-            versions.push({
+            {versions.push({
               type: "dependency",
               version: dependencies[depName],
-            });
+            });}
           if (devDependencies[depName])
-            versions.push({
+            {versions.push({
               type: "devDependency",
               version: devDependencies[depName],
-            });
+            });}
           if (peerDependencies[depName])
-            versions.push({
+            {versions.push({
               type: "peerDependency",
               version: peerDependencies[depName],
-            });
+            });}
 
           // If dependency appears in multiple sections, versions should be compatible
           if (versions.length > 1) {

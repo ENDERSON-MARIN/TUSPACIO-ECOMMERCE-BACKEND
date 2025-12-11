@@ -28,10 +28,10 @@ const getLogin = async (req, res, next) => {
       attributes: ["id"],
       where: { rolName: rol },
     });
-    let roleid = role_id.map((e) => e.id);
+    const roleid = role_id.map((e) => e.id);
 
     // VERIFICA SI EL USUARIO EXISTE
-    let user = await User.findAll({
+    const user = await User.findAll({
       where: {
         [Op.or]: [{ email: email }, { nickname: nickname }],
       },
