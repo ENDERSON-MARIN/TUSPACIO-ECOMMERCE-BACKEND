@@ -44,14 +44,14 @@
   - **Property 6: Multi-environment database support**
   - **Validates: Requirements 2.4**
 
-- [ ] 4. Enhance authentication and security systems
+- [x] 4. Enhance authentication and security systems
   - Update express-openid-connect to latest version
   - Implement secure JWT token management and refresh strategies
   - Update password hashing to use bcrypt with appropriate salt rounds
   - Enhance session security configuration
   - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5_
 
-- [ ] 4.1 Write property test for authentication security compliance
+- [x] 4.1 Write property test for authentication security compliance
   - **Property 11: Authentication security compliance**
   - **Validates: Requirements 4.2, 4.4**
 

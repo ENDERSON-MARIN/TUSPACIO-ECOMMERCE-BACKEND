@@ -4,19 +4,34 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
+const session = require("express-session");
 const routes = require("./routes/index.js");
 const cors = require("cors");
 require("dotenv").config();
-// const { auth } = require('express-openid-connect');
 
-// const config = {
-//   authRequired: false,
-//   auth0Logout: true,
-//   secret: process.env.SECRET,
-//   baseURL: process.env.BASE_URL,
-//   clientID: process.env.CLIENT_ID,
-//   issuerBaseURL: process.env.ISSUER_BASE_URL
-// };
+// Enhanced Auth0 configuration (updated to latest version)
+const { auth } = require("express-openid-connect");
+
+const auth0Config = {
+  authRequired: false,
+  auth0Logout: true,
+  secret: process.env.AUTH0_SECRET || process.env.SECRET,
+  baseURL: process.env.AUTH0_BASE_URL || process.env.BASE_URL,
+  clientID: process.env.AUTH0_CLIENT_ID || process.env.CLIENT_ID,
+  issuerBaseURL:
+    process.env.AUTH0_ISSUER_BASE_URL || process.env.ISSUER_BASE_URL,
+  clientSecret: process.env.AUTH0_CLIENT_SECRET,
+  idpLogout: true,
+  session: {
+    rollingDuration: 24 * 60 * 60, // 24 hours in seconds
+    absoluteDuration: 7 * 24 * 60 * 60, // 7 days in seconds
+  },
+  routes: {
+    login: "/auth/login",
+    logout: "/auth/logout",
+    callback: "/auth/callback",
+  },
+};
 
 require("./db.js");
 
@@ -114,6 +129,30 @@ const corsOptions = {
 };
 
 server.use(cors(corsOptions));
+
+// Enhanced session configuration for security
+const sessionConfig = {
+  secret:
+    process.env.SESSION_SECRET ||
+    "your-super-secure-session-secret-key-minimum-32-characters",
+  name: "tuspacio.sid", // Custom session name
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === "production", // HTTPS only in production
+    httpOnly: true, // Prevent XSS attacks
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax", // CSRF protection
+  },
+  rolling: true, // Reset expiration on activity
+};
+
+server.use(session(sessionConfig));
+
+// Auth0 middleware (optional - can be enabled via environment variable)
+if (process.env.ENABLE_AUTH0 === "true" && auth0Config.clientID) {
+  server.use(auth(auth0Config));
+}
 
 // Request parsing middleware - optimized ordering
 server.use(
