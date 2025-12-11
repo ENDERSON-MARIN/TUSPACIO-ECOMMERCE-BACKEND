@@ -7,6 +7,8 @@
     "start": "node index.js",
     "dev": "nodemon -L",
     "db:sync": "node sync-database.js",
+    "db:seed": "node src/scripts/seed-products.js",
+    "db:seed:products": "node src/scripts/seed-products.js",
     "test": "mocha --recursive ./tests/**/*.spec.js --exit",
     "test:watch": "mocha --recursive ./tests/**/*.spec.js --watch",
     "test:coverage": "nyc mocha --recursive ./tests/**/*.spec.js --exit",
