@@ -8,9 +8,76 @@ const { Product, database } = require('../db');
  * Este script lê os produtos do arquivo JSON e os insere no banco de dados PostgreSQL
  */
 
+// Categorias de teste para vincular aos produtos
+const testCategories = [
+  {
+    id: 1,
+    name: 'Maquiagem para Olhos',
+    description: 'Produtos para realçar e definir os olhos',
+    product_types: ['mascara', 'eyeshadow', 'eyeliner'],
+    active: true,
+  },
+  {
+    id: 2,
+    name: 'Maquiagem para Lábios',
+    description: 'Produtos para colorir e hidratar os lábios',
+    product_types: ['lipstick', 'lip_gloss', 'lip_liner'],
+    active: true,
+  },
+  {
+    id: 3,
+    name: 'Base e Corretivos',
+    description: 'Produtos para uniformizar e corrigir a pele',
+    product_types: ['foundation', 'concealer', 'powder'],
+    active: true,
+  },
+  {
+    id: 4,
+    name: 'Cuidados com Unhas',
+    description: 'Esmaltes e produtos para cuidado das unhas',
+    product_types: ['nail_polish'],
+    active: true,
+  },
+  {
+    id: 5,
+    name: 'Contorno e Iluminação',
+    description: 'Produtos para contornar e iluminar o rosto',
+    product_types: ['bronzer', 'blush', 'highlighter'],
+    active: true,
+  },
+  {
+    id: 6,
+    name: 'Produtos Premium',
+    description: 'Linha premium com produtos de alta qualidade',
+    product_types: ['lipstick', 'foundation', 'mascara'],
+    active: true,
+  },
+];
+
+// Função para determinar a categoria baseada no tipo de produto
+const getCategoryForProduct = productType => {
+  for (const category of testCategories) {
+    if (category.product_types.includes(productType)) {
+      return category.id;
+    }
+  }
+  // Categoria padrão para produtos não categorizados
+  return 1;
+};
+
 const seedProducts = async () => {
   try {
     console.log('🌱 Iniciando seed dos produtos...');
+
+    // Mostrar informações sobre as categorias de teste
+    console.log('📂 Categorias de teste disponíveis:');
+    testCategories.forEach(category => {
+      console.log(`   - ${category.name}: ${category.description}`);
+      console.log(
+        `     Tipos de produto: ${category.product_types.join(', ')}`
+      );
+    });
+    console.log('');
 
     // Ler o arquivo db.json
     const dbJsonPath = path.join(__dirname, '../controllers/db.json');
@@ -35,7 +102,22 @@ const seedProducts = async () => {
       console.log(
         `🗑️  Removendo ${existingProductsCount} produtos existentes...`
       );
-      await Product.destroy({ where: {}, truncate: true });
+
+      // Usar CASCADE para remover registros relacionados ou simplesmente DELETE sem TRUNCATE
+      // para evitar problemas com foreign key constraints
+      try {
+        // Primeiro, tentar com truncate e cascade
+        await database.query('TRUNCATE TABLE product RESTART IDENTITY CASCADE');
+        console.log('✅ Produtos removidos com TRUNCATE CASCADE');
+      } catch (truncateError) {
+        console.log('⚠️  TRUNCATE falhou, usando DELETE...');
+        // Se truncate falhar, usar delete normal
+        await Product.destroy({
+          where: {},
+          force: true, // Para garantir que seja um hard delete
+        });
+        console.log('✅ Produtos removidos com DELETE');
+      }
     }
 
     // Processar produtos em lotes para melhor performance
@@ -50,6 +132,8 @@ const seedProducts = async () => {
       for (const product of batch) {
         try {
           // Mapear os dados do JSON para o formato do modelo
+          const productType =
+            product.product_type || product.category || 'cosmetic';
           const productData = {
             brand: product.brand || 'Unknown',
             name: product.name || 'Produto sem nome',
@@ -59,8 +143,8 @@ const seedProducts = async () => {
             image_link: product.image_link || product.api_featured_image || '',
             description: product.description || 'Sem descrição disponível',
             rating: parseFloat(product.rating) || 0,
-            product_type:
-              product.product_type || product.category || 'cosmetic',
+            product_type: productType,
+            category_id: getCategoryForProduct(productType), // Vincular à categoria de teste
             stock: Math.floor(Math.random() * 100) + 1, // Stock aleatório entre 1-100
             tag_list: product.tag_list || [],
             product_colors: product.product_colors || [],
@@ -134,7 +218,7 @@ const seedProducts = async () => {
   } finally {
     // Fechar conexão com o banco
     await database.close();
-    console.log('🔌 Conexão com banco fechada');
+
     process.exit(0);
   }
 };
