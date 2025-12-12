@@ -1,4 +1,4 @@
-const { User, Rol, Product } = require('../../db');
+const { User, Rol, Product, Order } = require('../../db');
 const { Op } = require('sequelize');
 const {
   catchAsync,

@@ -4,7 +4,7 @@ const orderCombine = async (req, res, next) => {
 
   try {
     // Mock data para teste
-    let mockProducts = [
+    const mockProducts = [
       {
         id: 1,
         name: 'iPhone 14 Pro',

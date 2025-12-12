@@ -236,7 +236,7 @@ class PerformanceMonitor {
    */
   updateAverageResponseTime() {
     const responseTimes = this.metrics.requests.responseTimes;
-    if (responseTimes.length === 0) return;
+    if (responseTimes.length === 0) {return;}
 
     const sum = responseTimes.reduce((acc, rt) => acc + rt.time, 0);
     this.metrics.requests.averageResponseTime = Math.round(
