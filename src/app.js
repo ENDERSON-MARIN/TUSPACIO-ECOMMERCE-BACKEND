@@ -98,8 +98,8 @@ const corsOptions = {
     const allowedOrigins = [
       'http://localhost:3000',
       'http://localhost:3001',
-      'https://pg-tuspacio.up.railway.app',
       'https://tuspacio.vercel.app',
+      'https://tuspacio-ecmm.vercel.app',
     ];
 
     // Allow requests with no origin (mobile apps, Postman, etc.)

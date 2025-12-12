@@ -27,8 +27,9 @@
     "lint:fix": "eslint src/**/*.js tests/**/*.js --fix",
     "format": "prettier --write \"src/**/*.js\" \"tests/**/*.js\" \"tests/**/*.js\" \"*.js\" \"*.json\" \"*.md\"",
     "format:check": "prettier --check \"src/**/*.js\" \"tests/**/*.js\" \"*.js\" \"*.json\" \"*.md\"",
-    "quality": "npm run lint && npm run format:check",
-    "prepare": "npm run quality",
+    "quality": "npm run lint && npm run format:check && npm run test",
+    "quality:check": "npm run lint && npm run format:check",
+    "prepare": "node scripts/prepare.js",
     "postinstall": "echo 'Dependencies installed successfully'",
     "pre-deploy": "node scripts/pre-deploy-check.js",
     "deploy:vercel": "npm run pre-deploy && vercel --prod"
