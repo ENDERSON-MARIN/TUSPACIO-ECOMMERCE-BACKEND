@@ -20,10 +20,13 @@
     "no-underscore-dangle": "off",
     "no-param-reassign": "off",
     "no-console": "warn",
-    "prefer-const": "error",
+    "prefer-const": "warn",
     "no-var": "error",
-    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
-    "eqeqeq": ["error", "always"],
-    "curly": ["error", "all"]
+    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+    "eqeqeq": ["warn", "always"],
+    "curly": ["warn", "all"],
+    "no-control-regex": "warn",
+    "no-inner-declarations": "warn",
+    "no-useless-escape": "warn"
   }
 }

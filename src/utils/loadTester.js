@@ -305,7 +305,7 @@ class LoadTester {
    * @returns {number} Percentile value
    */
   getPercentile(sortedArray, percentile) {
-    if (sortedArray.length === 0) return 0;
+    if (sortedArray.length === 0) {return 0;}
 
     const index = Math.ceil((percentile / 100) * sortedArray.length) - 1;
     return sortedArray[Math.max(0, index)];

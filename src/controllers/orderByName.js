@@ -71,7 +71,7 @@ const orderProductsName = async (req, res, next) => {
       },
     ];
 
-    let sortedProducts = [...mockProducts];
+    const sortedProducts = [...mockProducts];
 
     if (alpha === 'asc') {
       sortedProducts.sort((a, b) =>

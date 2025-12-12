@@ -332,7 +332,7 @@ describe('Property 16: Health check availability', function () {
       fc.asyncProperty(
         fc.constantFrom('light', 'moderate', 'heavy'), // Load type
         async loadType => {
-          let loadPromises = [];
+          const loadPromises = [];
 
           // Create different load conditions
           if (loadType === 'moderate') {
