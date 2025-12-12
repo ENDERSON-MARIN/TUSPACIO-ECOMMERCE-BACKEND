@@ -6,8 +6,10 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon -L",
-    "build": "echo 'Build completed successfully'",
-    "vercel-build": "echo 'Vercel build completed'",
+    "build": "npm run quality:check && npm run prepare",
+    "build:prod": "NODE_ENV=production npm run build",
+    "build:vercel": "npm run pre-deploy && echo 'Build completed for Vercel deployment'",
+    "vercel-build": "npm run build:vercel",
     "db:sync": "node sync-database.js",
     "db:seed": "node src/scripts/seed-initial-data.js",
     "db:seed:initial": "node src/scripts/seed-initial-data.js",
