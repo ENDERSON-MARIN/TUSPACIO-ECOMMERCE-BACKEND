@@ -33,8 +33,6 @@
     "format:check": "prettier --check \"src/**/*.js\" \"tests/**/*.js\" \"*.js\" \"*.json\" \"*.md\"",
     "quality": "npm run lint && npm run format:check && npm run test",
     "quality:check": "npm run lint && npm run format:check",
-    "prepare": "node scripts/prepare.js || echo 'Prepare script completed with warnings'",
-    "postinstall": "echo 'Dependencies installed successfully'",
     "install:clean": "npm install --no-audit --no-fund --quiet",
     "install:silent": "npm install --no-audit --no-fund --silent",
     "ci:install": "npm ci --no-audit --no-fund --quiet",
