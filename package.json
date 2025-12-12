@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon -L",
+    "build": "npm run build",
     "db:sync": "node sync-database.js",
     "db:seed": "node src/scripts/seed-initial-data.js",
     "db:seed:initial": "node src/scripts/seed-initial-data.js",
@@ -23,7 +24,7 @@
     "dev:full": "concurrently \"npm run json\" \"npm run dev\"",
     "install:clean": "npm install --no-audit --no-fund --quiet",
     "install:silent": "npm install --no-audit --no-fund --silent",
-    "ci:install": "npm ci --no-audit --no-fund --quiet"
+    "ci:install": "npm ci --no-audit --no-fund --quiet",
   },
   "author": "Enderson Millan",
   "license": "ISC",
