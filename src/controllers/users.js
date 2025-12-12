@@ -1,16 +1,16 @@
+/* eslint-disable no-unused-vars */
+const { User, Rol, Product } = require('../db');
 
-const { User, Rol, Product } = require("../db");
-
-const axios = require("axios");
-const { URL_API } = require("./globalConst");
-const { Op } = require("sequelize")
+const axios = require('axios');
+const { URL_API } = require('./globalConst');
+const { Op } = require('sequelize');
 
 /* GET ALL USERS FROM DB */
 
 const getAllUsers = async (req, res) => {
   try {
     const dbInfo = await User.findAll();
-    res.send( dbInfo)
+    res.send(dbInfo);
   } catch (error) {
     console.log(error);
   }
@@ -20,62 +20,52 @@ const getAllUsers = async (req, res) => {
 const getOneUsers = async (req, res) => {
   try {
     const dbUserInfo = await User.findOne({
-    where: { id: req.params.id
-    }})
-    res.send(dbUserInfo)
+      where: { id: req.params.id },
+    });
+    res.send(dbUserInfo);
   } catch (error) {
-    res.send({message: error.message})
+    res.send({ message: error.message });
   }
-}
+};
 
 /* CREATE NEW USER IN THE DATABASE */
 const createUser = async (req, res, next) => {
   /* ME TRAIGO TODOS LOS VALORES DEL CUERPO DE LA PETICION */
-  const {
-    name,
-    nickname,
-    email,
-    email_verified,
-    picture,
-    sid,
-  } = req.body
+  const { name, nickname, email, email_verified, picture, sid } = req.body;
   try {
     // BUSCAR EL ID DEL ROL
     const role_id = await Rol.findAll({
-      attributes: ["id"],
-      where: { rolName: "user" }
-    })
-    const roleid = role_id.map(e => e.id)
+      attributes: ['id'],
+      where: { rolName: 'user' },
+    });
+    const roleid = role_id.map(e => e.id);
     // VERIFICA SI EL USUARIO EXISTE
     let user = await User.findAll({
       where: {
-        [Op.or]: [
-          { email: email },
-          { nickname: nickname }
-        ]
-      }
-    })
-   // SI EL USUARIO NO EXISTE LO CREA EN LA DB
+        [Op.or]: [{ email: email }, { nickname: nickname }],
+      },
+    });
+    // SI EL USUARIO NO EXISTE LO CREA EN LA DB
     if (user.length === 0) {
       user = await User.create({
-        name,  //aca
+        name, //aca
         nickname,
         email,
         email_verified,
         sid,
         picture,
-        rol_id: roleid
-      })
+        rol_id: roleid,
+      });
       res.send(user);
     }
-    //  SI EL USUARIO EXISTE LO RETORNA 
+    //  SI EL USUARIO EXISTE LO RETORNA
     else {
       res.send(user);
     }
   } catch (error) {
-    res.send({ error: error.message })
+    res.send({ error: error.message });
   }
-}
+};
 
 /* UPDATE ONE USER IN THE DATABASE */
 const updateUser = async (req, res, next) => {
@@ -90,7 +80,8 @@ const updateUser = async (req, res, next) => {
       picture,
       address,
       status,
-      rol_id } = req.body;
+      rol_id,
+    } = req.body;
     /* BUSCO EL USER EN LA BD POR EL ID */
     const userDb = await User.findByPk(id);
 
@@ -106,7 +97,7 @@ const updateUser = async (req, res, next) => {
       status,
       rol_id,
     });
-  res.status(200).json({msg: "User Updated Successfully!"});
+    res.status(200).json({ msg: 'User Updated Successfully!' });
   } catch (error) {
     next(error);
   }
@@ -123,7 +114,8 @@ const deleteUser = async (req, res, next) => {
       status: false,
     });
     res.status(200).json({
-      succMsg: "User Deleted Successfully!",
+      userEdited: updatedUser,
+      succMsg: 'User Deleted Successfully!',
     });
   } catch (error) {
     next(error);
@@ -139,7 +131,7 @@ const addFavorite = async (req, res, next) => {
     const productDb = await Product.findByPk(idProduct);
     await userDb.addProduct(productDb);
     res.status(200).json({
-      succMsg: "Favorite Added Successfully!",
+      succMsg: 'Favorite Added Successfully!',
     });
   } catch (error) {
     next(error);
@@ -154,7 +146,7 @@ const deleteFavorite = async (req, res, next) => {
     const productDb = await Product.findByPk(idProduct);
     await userDb.removeProduct(productDb);
     res.status(200).json({
-      succMsg: "Favorite Deleted Successfully!",
+      succMsg: 'Favorite Deleted Successfully!',
     });
   } catch (error) {
     next(error);
@@ -166,19 +158,19 @@ const getAllFavorites = async (req, res) => {
     const { idUser } = req.params;
     const userDb = await User.findByPk(idUser);
     const favorites = await userDb.getProducts();
-    res.send(favorites.map((favorite) => favorite.id));
+    res.send(favorites.map(favorite => favorite.id));
   } catch (error) {
     console.log(error);
   }
 };
 
 module.exports = {
-    getAllUsers,
-    getOneUsers,
-    createUser,
-    updateUser,
-    deleteUser,
-    addFavorite,
-    deleteFavorite,
-    getAllFavorites
+  getAllUsers,
+  getOneUsers,
+  createUser,
+  updateUser,
+  deleteUser,
+  addFavorite,
+  deleteFavorite,
+  getAllFavorites,
 };

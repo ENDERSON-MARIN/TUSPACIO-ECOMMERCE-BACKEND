@@ -1,7 +1,7 @@
-const { Router } = require("express");
-const Joi = require("joi");
-const validator = require("express-joi-validation").createValidator({});
-
+/* eslint-disable no-unused-vars */
+const { Router } = require('express');
+const Joi = require('joi');
+const validator = require('express-joi-validation').createValidator({});
 
 /* LINKS TO DOCS JOI AND EXPRESS-JOI-VALIDATION 
 https://joi.dev/api/?v=17.6.0
@@ -39,51 +39,48 @@ const {
   addFavorite,
   deleteFavorite,
   getAllFavorites,
-} = require("../controllers/users");
-    
+} = require('../controllers/users');
+
 const router = Router();
 
 /* SE ARMAN LAS RUTAS PASANDO LAS VALIDACIONES COMO MIDDLEWARES */
 
 /* GET ALL USERS FRONT THE DATABASE */
-router.get("/", getAllUsers);
+router.get('/', getAllUsers);
 
 /* GET ONE USER FRONT THE DATABASE */
-router.get("/:id", getOneUsers);
+router.get('/:id', getOneUsers);
 
 /* CREATE NEW USER IN THE DATABASE */
-router.post("/", createUser);
-
+router.post('/', createUser);
 
 /* UPDATE USERS IN THE DATABASE */
-router.put(
-  "/:id",
-  updateUser
-);
+router.put('/:id', updateUser);
 
 /* INSERT A FAVORITE USER OF A USER */
 router.put(
-  "/addFavorite/:idUser/:idProduct",
+  '/addFavorite/:idUser/:idProduct',
   validator.params(paramsSchema),
   validator.body(bodySchema),
   addFavorite
 );
 
 /* GET ALL FAVORITES OF A USER */
-router.get("/favorites/:idUser", validator.params(paramsSchema),
+router.get(
+  '/favorites/:idUser',
+  validator.params(paramsSchema),
   getAllFavorites
 );
 
 /* DELETE A FAVORITE PRODUCT OF A USER */
-router.delete("/deleteFavorite/:idUser/:idProduct",
+router.delete(
+  '/deleteFavorite/:idUser/:idProduct',
   validator.params(paramsSchema),
   validator.body(bodySchema),
   deleteFavorite
 );
 
-
-
 /* DELETE USER IN THE DATABASE */
-router.delete("/:id", deleteUser);
+router.delete('/:id', deleteUser);
 
 module.exports = router;
